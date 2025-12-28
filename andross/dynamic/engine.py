@@ -58,7 +58,7 @@ def run_dynamic_analysis(output_dir, package_name, minimal=False):
                 
                 if not minimal:
                     print(f"\n[*] SUGGESTION: Try again with --minimal flag to reduce memory pressure:")
-                    print(f"    python Andross.py --dynamic --output {output_dir} --minimal")
+                    print(f"    python Andross.py --dynamic <path/to/app.apk> --output {output_dir} --minimal")
                 
                 return False
                 
