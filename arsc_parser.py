@@ -60,7 +60,7 @@ def extract_strings_from_arsc(data, debug=False, skip_filter=False):
                 all_strings.extend(strings)
 
     if debug:
-        print("\n[DEBUG] ===============================")
+        print("\n =============Resources.arsc DEBUG SUMMARY==============")
         print("[DEBUG] String pools found:", pools_found)
         print("[DEBUG] Total strings extracted:", len(all_strings))
         print("[DEBUG] resources.arsc parsing OK")
