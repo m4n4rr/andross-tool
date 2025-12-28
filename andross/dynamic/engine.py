@@ -3,16 +3,18 @@ import subprocess
 import time
 
 
-def run_dynamic_analysis(output_dir, package_name, minimal=False):
+def run_dynamic_analysis(output_file, package_name, minimal=False):
     """Run dynamic analysis using Frida
     
     Args:
-        output_dir: Directory to save Frida output
+        output_file: File path where to save Frida output
         package_name: Target package name for Frida to spawn
         minimal: If True, use minimal script (StringBuilder and valueOf disabled)
     """
     
-    if not os.path.exists(output_dir):
+    # Create parent directory if it doesn't exist
+    output_dir = os.path.dirname(output_file)
+    if output_dir and not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
     # Select script based on minimal flag
@@ -23,8 +25,8 @@ def run_dynamic_analysis(output_dir, package_name, minimal=False):
         print(f"[ERROR] {script_name} not found in the script directory")
         return
     
-    # Run frida in USB mode with the script
-    frida_output_file = os.path.join(output_dir, 'frida_output.txt')
+    # Use the provided output file directly
+    frida_output_file = output_file
     
     mode_label = "minimal" if minimal else "full"
     print(f"[*] Starting Frida dynamic analysis ({mode_label} mode)...")
