@@ -49,22 +49,14 @@ def extract_strings_from_arsc(data, debug=False, skip_filter=False):
     Returns: list of dicts compatible with main() unique_strings
     """
     all_strings = []
-    pools_found = 0
 
     for offset in range(0, len(data) - 8, 4):
         chunk_type = struct.unpack_from("<H", data, offset)[0]
         if chunk_type == STRING_POOL_TYPE:
             strings = parse_string_pool(data, offset, debug)
             if strings:
-                pools_found += 1
                 all_strings.extend(strings)
 
-    if debug:
-        print("\n =============Resources.arsc DEBUG SUMMARY==============")
-        print("[DEBUG] String pools found:", pools_found)
-        print("[DEBUG] Total strings extracted:", len(all_strings))
-        print("[DEBUG] resources.arsc parsing OK")
-        print("[DEBUG] ===============================\n")
 
     output = []
     for s in all_strings:

@@ -1,18 +1,41 @@
+// Structured event-based string interception for Frida (MINIMAL MODE)
+// Emits JSON events via console.log for command-line capture
+// MINIMAL: Disables StringBuilder and valueOf to reduce memory pressure
+
 Java.perform(function () {
 
-    // stack mapping 
-    function printStack() {
-        var Throwable = Java.use("java.lang.Throwable");
-        var stack = Throwable.$new().getStackTrace();
+    // Event emitter - outputs structured JSON data to console
+    function emitEvent(type, value, caller) {
+        var event = {
+            type: type,
+            value: value,
+            caller: caller
+        };
+        console.log(JSON.stringify(event));
+    }
 
-        for (var i = 0; i < stack.length; i++) {
-            var f = stack[i];
-            var cls = f.getClassName();
-            if (cls.startsWith("com.example")) {
-                console.log("    at " + cls + "." + f.getMethodName());
-                break;
+    // Extract first relevant app caller from stack trace
+    function getAppCaller() {
+        try {
+            var Throwable = Java.use("java.lang.Throwable");
+            var stack = Throwable.$new().getStackTrace();
+            
+            for (var i = 0; i < stack.length; i++) {
+                var f = stack[i];
+                var cls = f.getClassName();
+                
+                // Look for app package (skip framework/Frida internals)
+                if (!cls.startsWith("java.") && 
+                    !cls.startsWith("android.") &&
+                    !cls.startsWith("com.android.") &&
+                    !cls.startsWith("dalvik.")) {
+                    return cls + "." + f.getMethodName();
+                }
             }
+        } catch (e) {
+            // Silently fail - return default
         }
+        return "unknown.unknown";
     }
 
     var StringFactory = Java.use("java.lang.StringFactory");
@@ -21,83 +44,69 @@ Java.perform(function () {
     var BufferedReader = Java.use("java.io.BufferedReader");
     var SharedPreferences = Java.use("android.content.SharedPreferences");
 
-    // byte[]
+    // ===== StringFactory.newStringFromBytes =====
     StringFactory.newStringFromBytes.overload(
         '[B', 'int', 'int', 'java.nio.charset.Charset'
     ).implementation = function (bytes, offset, length, charset) {
         var str = this.newStringFromBytes(bytes, offset, length, charset);
-        console.log("[String][bytes] =>", str);
-        printStack();
+        if (str && str.length > 0) {
+            emitEvent("bytes", str, getAppCaller());
+        }
         return str;
     };
 
-    // char[]
+    // ===== StringFactory.newStringFromChars =====
     StringFactory.newStringFromChars.overload(
         '[C', 'int', 'int'
     ).implementation = function (chars, offset, length) {
         var str = this.newStringFromChars(chars, offset, length);
-        console.log("[String][chars] =>", str);
-        printStack();
+        if (str && str.length > 0) {
+            emitEvent("chars", str, getAppCaller());
+        }
         return str;
     };
 
-    // copy
+    // ===== StringFactory.newStringFromString =====
     StringFactory.newStringFromString.overload(
         'java.lang.String'
     ).implementation = function (s) {
         var str = this.newStringFromString(s);
-        console.log("[String][copy] =>", str);
-        printStack();
+        if (str && str.length > 0) {
+            emitEvent("copy", str, getAppCaller());
+        }
         return str;
     };
 
-    // ===== StringBuilder ===== 
-    // DISABLED: StringBuilder.toString to reduce memory pressure
-    /*
-    StringBuilder.toString.implementation = function () {
-        var result = this.toString();
-        console.log("[String][StringBuilder] =>", result);
-        printStack();
-        return result;
-    };
-    */
+    // ===== StringBuilder.toString =====
+    // DISABLED: to reduce memory pressure in minimal mode
 
-    // ===== NEW ADDITIONS =====
+    // ===== String.valueOf(Object) =====
+    // DISABLED: to reduce memory pressure in minimal mode
 
-    // String.valueOf(Object)
-    // DISABLED: String.valueOf(Object) to reduce memory pressure
-    /*
-    StringClass.valueOf.overload('java.lang.Object').implementation = function (obj) {
-        var result = this.valueOf(obj);
-        console.log("[String][valueOf(Object)] =>", result);
-        printStack();
-        return result;
-    };
-    */
-
-    // String.concat(String)
+    // ===== String.concat(String) =====
     StringClass.concat.implementation = function (s) {
         var result = this.concat(s);
-        console.log("[String][concat] =>", result);
-        printStack();
+        if (result && result.length > 0) {
+            emitEvent("concat", result, getAppCaller());
+        }
         return result;
     };
 
-    // BufferedReader.readLine()
+    // ===== BufferedReader.readLine() =====
     BufferedReader.readLine.implementation = function () {
         var line = this.readLine();
-        if (line !== null) {
-            console.log("[String][BufferedReader.readLine] =>", line);
-            printStack();
+        if (line !== null && line.length > 0) {
+            emitEvent("readline", line, getAppCaller());
         }
         return line;
     };
 
-    // SharedPreferences.getString(key, def)
+    // ===== SharedPreferences.getString() =====
     SharedPreferences.getString.implementation = function (key, def) {
         var value = this.getString(key, def);
-        console.log("[String][SharedPreferences] key =", key, "value =", value);
-        printStack();
+        if (value !== null && value.length > 0) {
+            emitEvent("prefs", value, getAppCaller());
+        }
         return value;
     };
 
