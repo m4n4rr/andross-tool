@@ -167,7 +167,7 @@ def main():
             minimal_mode = '--minimal' in sys.argv
             
             # Extract package name from APK
-            print(f"[*] Extracting package name from APK...")
+            print("[*] Extracting package name from APK...")
             package_name = extract_package_from_apk(apk_path, debug=False)
             
             if not package_name:
