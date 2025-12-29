@@ -1,0 +1,1043 @@
+{
+  "app": "com.example.decryption",
+  "strings": [
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "valueof",
+      "value": "/system_ext/lib",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "stringbuilder",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "valueof",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"]",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "stringbuilder",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "valueof",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 25
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"android.window.OnBackInvokedDispatcher\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 15
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"android.window.OnBackInvokedCallback\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.appcompat.app.AppCompatDelegate.create",
+      "count": 10
+    },
+    {
+      "type": "stringbuilder",
+      "value": "en-US",
+      "caller": "unknown.unknown",
+      "count": 7
+    },
+    {
+      "type": "chars",
+      "value": "en-us",
+      "caller": "sun.util.locale.LocaleUtils.toLowerString",
+      "count": 5
+    },
+    {
+      "type": "valueof",
+      "value": "com.example.decryption/com.example.decryption.MainActivity",
+      "caller": "unknown.unknown",
+      "count": 4
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "valueof",
+      "value": "/system_ext/lib",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "stringbuilder",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "valueof",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "stringbuilder",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "valueof",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 3
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "valueof",
+      "value": "/system_ext/lib",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "valueof",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"android.window.OnBackInvokedDispatcher\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"]",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "en-US",
+      "caller": "androidx.core.os.LocaleListCompat$Api24Impl.createLocaleList",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "flag{ofcourse_iam_here!}",
+      "caller": "com.example.decryption.MainActivity.decode2",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "putProviderProperty.AndroidNSSP",
+      "caller": "unknown.unknown",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "textclassifier/",
+      "caller": "androidx.appcompat.widget.AppCompatEditText.<init>",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "valueof",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.activity.ComponentActivity.onBackPressedDispatcher_delegate$lambda$0",
+      "count": 2
+    },
+    {
+      "type": "stringbuilder",
+      "value": "}!ereh_mai_esruocfo{galf",
+      "caller": "com.example.decryption.MainActivity.decode2",
+      "count": 2
+    },
+    {
+      "type": "chars",
+      "value": "}!gtgj_ock_gutwqehq{icnh",
+      "caller": "com.example.decryption.MainActivity.decode",
+      "count": 2
+    },
+    {
+      "type": "bytes",
+      "value": "}!gtgj_ock_gutwqehq{icnh",
+      "caller": "com.example.decryption.MainActivity.decode",
+      "count": 2
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/misc",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/misc/profiles/cur/0/com.example.decryption",
+      "caller": "androidx.profileinstaller.ProfileInstaller.transcodeAndWrite",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/misc/profiles/cur/0/com.example.decryption/primary.prof",
+      "caller": "androidx.profileinstaller.ProfileInstaller.transcodeAndWrite",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/misc/user",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/misc/user/0",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/misc/user/0/cacerts-removed",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/user_de/0/com.example.decryption/code_cache",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/user_de/0/com.example.decryption/code_cache/com.android.opengl.shaders_cache",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "/data/user_de/0/com.example.decryption/code_cache/com.android.skia.shaders_cache",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "/system_ext/lib",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "/system_ext/lib",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "chars",
+      "value": "10197",
+      "caller": "com.example.decryption.MainActivity.onCreate",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "10197",
+      "caller": "com.example.decryption.MainActivity.onCreate",
+      "count": 1
+    },
+    {
+      "type": "chars",
+      "value": "147798919",
+      "caller": "com.example.decryption.MainActivity.onCreate",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "147798919",
+      "caller": "com.example.decryption.MainActivity.onCreate",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "Android Network Security Policy Provider",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "AndroidNSSP",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "AsyncTask #1",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "AsyncTask #2",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Compat change id reported: 147798919; UID 10197; state: ENABLED",
+      "caller": "com.example.decryption.MainActivity.onCreate",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "ComponentInfo{com.example.decryption/androidx.appcompat.app.AppLocalesMetadataHolderService}",
+      "caller": "androidx.appcompat.app.AppLocalesMetadataHolderService.getServiceInfo",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "DecorView[]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"android.app.ViewStub\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"android.webkit.ViewStub\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"android.widget.ViewStub\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"android.window.OnBackInvokedDispatcher\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Didn't find class \"kotlin.reflect.jvm.internal.ReflectionFactoryImpl\" on path: DexPathList[[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"],nativeLibraryDirectories=[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]]",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Flattened final assist data: 1328 bytes, containing 1 windows, 7 views",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "FragmentManager:",
+      "caller": "androidx.fragment.app.FragmentManager.attachController",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "FragmentManager:RequestPermissions",
+      "caller": "androidx.fragment.app.FragmentManager.attachController",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "FragmentManager:StartActivityForResult",
+      "caller": "androidx.fragment.app.FragmentManager.attachController",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "FragmentManager:StartIntentSenderForResult",
+      "caller": "androidx.fragment.app.FragmentManager.attachController",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Installing profile for com.example.decryption",
+      "caller": "androidx.profileinstaller.ProfileInstaller.writeProfile",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Skipped 164 frames!  The application may be doing too much work on its main thread.",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "Skipped 43 frames!  The application may be doing too much work on its main thread.",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "ViewRootImpl[MainActivity]",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/lib/x86, /system/lib, /system_ext/lib]",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"]",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "[zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"]",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "chars",
+      "value": "alg.alias.trustmanagerfactory.x509",
+      "caller": "sun.security.jca.ProviderList.getService",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android.app.ViewStub",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android.security.net.config.RootTrustManagerFactorySpi",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android.view.ViewStub",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android.webkit.ViewStub",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android.widget.FrameLayout",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android.widget.LinearLayout",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android.widget.ViewStub",
+      "caller": "androidx.activity.EdgeToEdge.enable",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "android:fragment:0",
+      "caller": "androidx.lifecycle.ReportFragment$Companion.injectIfNeededIn",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.concurrent.futures.AbstractResolvableFuture.handlers",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.concurrent.futures.AbstractResolvableFuture.level",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.concurrent.futures.AbstractResolvableFuture.useParentHandlers",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.concurrent.futures.handlers",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.concurrent.futures.level",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.concurrent.handlers",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.concurrent.level",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.handlers",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.level",
+      "caller": "androidx.concurrent.futures.AbstractResolvableFuture.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "androidx.lifecycle.ViewModelProvider.DefaultKey:androidx.fragment.app.FragmentManagerViewModel",
+      "caller": "androidx.lifecycle.ViewModelProvider.get",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "aq:ime:com.example.decryption/com.example.decryption.MainActivity",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "aq:native-post-ime:com.example.decryption/com.example.decryption.MainActivity",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "aq:native-pre-ime:com.example.decryption/com.example.decryption.MainActivity",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "aq:pending:com.example.decryption/com.example.decryption.MainActivity",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "com.example.decryption/com.example.decryption.MainActivity",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "com.example.decryption/com.example.decryption.MainActivity",
+      "caller": "androidx.constraintlayout.widget.ConstraintLayout.onLayout",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "cornerSizeAtIndex0",
+      "caller": "com.google.android.material.shape.MaterialShapeDrawable$SpringAnimatedCornerSizeProperty.<init>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "cornerSizeAtIndex1",
+      "caller": "com.google.android.material.shape.MaterialShapeDrawable$SpringAnimatedCornerSizeProperty.<init>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "cornerSizeAtIndex2",
+      "caller": "com.google.android.material.shape.MaterialShapeDrawable$SpringAnimatedCornerSizeProperty.<init>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "cornerSizeAtIndex3",
+      "caller": "com.google.android.material.shape.MaterialShapeDrawable$SpringAnimatedCornerSizeProperty.<init>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "en-US",
+      "caller": "androidx.appcompat.app.AppCompatDelegateImpl.attachBaseContext2",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "getElevation",
+      "caller": "androidx.appcompat.widget.AppCompatButton.drawableStateChanged",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "getTranslationZ",
+      "caller": "androidx.appcompat.widget.AppCompatButton.drawableStateChanged",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Boolean.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Byte.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Char.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Double.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Float.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function0",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function1",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function10",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function11",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function12",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function13",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function14",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function15",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function16",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function17",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function18",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function19",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function2",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function20",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function21",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function22",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function3",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function4",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function5",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function6",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function7",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function8",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Function9",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Int.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Long.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.Short.Companion",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.BooleanCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.ByteCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.CharCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.DoubleCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.FloatCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.IntCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.LongCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "kotlin.jvm.internal.ShortCompanionObject",
+      "caller": "kotlin.jvm.internal.ClassReference.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "pool-2-thread-",
+      "caller": "androidx.profileinstaller.ProfileInstallerInitializer.writeInBackground",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "pool-2-thread-1",
+      "caller": "androidx.profileinstaller.ProfileInstallerInitializer.writeInBackground",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "setElevation",
+      "caller": "androidx.appcompat.widget.AppCompatButton.drawableStateChanged",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "setTranslationZ",
+      "caller": "androidx.appcompat.widget.AppCompatButton.drawableStateChanged",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "settings",
+      "caller": "unknown.unknown",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "settings",
+      "caller": "androidx.appcompat.widget.AppCompatEditText.<init>",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "settings",
+      "caller": "com.google.android.material.button.MaterialButton.performClick",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "textclassifier/smart_select_animation_enabled",
+      "caller": "androidx.appcompat.widget.AppCompatEditText.<init>",
+      "count": 1
+    },
+    {
+      "type": "chars",
+      "value": "trustmanagerfactory.pkix",
+      "caller": "sun.security.jca.ProviderList.getService",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "androidx.core.app.CoreComponentFactory.instantiateActivity",
+      "count": 1
+    },
+    {
+      "type": "stringbuilder",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    },
+    {
+      "type": "valueof",
+      "value": "zip file \"/data/app/~~ymexpEwt9qX9TKh9SA2SmA==/com.example.decryption-DwTW8SiftynNZlbbA35u9g==/base.apk\"",
+      "caller": "kotlin.jvm.internal.Reflection.<clinit>",
+      "count": 1
+    }
+  ]
+}

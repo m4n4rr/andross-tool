@@ -16,6 +16,52 @@ def print_usage():
     print("  python Andross.py --static app.apk --pattern all\n")
 
 
+def print_help():
+    """Print detailed help information with descriptions"""
+    print("\n" + "="*70)
+    print("ANDROSS - APK Analysis Tool".center(70))
+    print("="*70)
+    
+    print("\n\033[1mDESCRIPTION:\033[0m")
+    print("  Andross is a comprehensive APK analysis tool that supports both")
+    print("  static and dynamic analysis modes for security research.\n")
+    
+    print("\033[1mUSAGE:\033[0m")
+    print("  python Andross.py [MODE] [OPTIONS]\n")
+    
+    print("\033[1mMODES:\033[0m")
+    print("  --static          Perform static analysis on the APK file")
+    print("  --dynamic         Perform dynamic analysis on the APK file")
+    print("  --help, -h        Display this help message\n")
+    
+    print("\033[1mSTATIC MODE OPTIONS:\033[0m")
+    print("  <path/to/app.apk> Path to the APK file to analyze (required)")
+    print("  --output <path>   Save analysis results to specified file or directory")
+    print("  --pattern <names> Specify patterns to search for (space-separated)")
+    print("                    Use: --pattern help  (to see available patterns)")
+    print("                    Use: --pattern all   (to search all patterns)")
+    print("  --debug           Enable debug output for detailed information")
+    print("  --skip-filter     Skip result filtering and show all raw findings\n")
+    
+    print("\033[1mDYNAMIC MODE OPTIONS:\033[0m")
+    print("  <path/to/app.apk> Path to the APK file to analyze (required)")
+    print("  --output <path>   Save analysis results to specified file (required)")
+    print("  --minimal         Run minimal hooks (reduced instrumentation)\n")
+    
+    print("\033[1mEXAMPLES:\033[0m")
+    print("  # View available patterns")
+    print("  python Andross.py --pattern help\n")
+    print("  # Static analysis with specific patterns")
+    print("  python Andross.py --static app.apk --pattern md5 jwt\n")
+    print("  # Static analysis with all patterns")
+    print("  python Andross.py --static app.apk --pattern all --output results.json\n")
+    print("  # Dynamic analysis with output file")
+    print("  python Andross.py --dynamic app.apk --output results.json\n")
+    print("  # Dynamic analysis with minimal hooks")
+    print("  python Andross.py --dynamic app.apk --output results.json --minimal\n")    
+    print()
+
+
 def main():
     """Main CLI entry point"""
     
@@ -23,8 +69,13 @@ def main():
         print_usage()
         sys.exit(1)
     
-    # Check if first argument is --pattern help
+    # Check if help is requested
     first_arg = sys.argv[1]
+    if first_arg in ['--help', '-h', 'help']:
+        print_help()
+        sys.exit(0)
+    
+    # Check if first argument is --pattern help
     if first_arg == '--pattern' and len(sys.argv) > 2 and sys.argv[2] == 'help':
         print("\n=== Available Patterns ===\n")
         for pattern_name in get_available_patterns():

@@ -63,15 +63,18 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
                     all_strings.extend(extracted)
 
     if debug_mode:
-        print(f"\n=== EXTRACTION DEBUG SUMMARY ===")
-        print(f"DEX files found: {dex_files_found}")
-        print(f"Total DEX strings extracted: {len(dex_strings)}")
-        print(f"resources.arsc found: {arsc_found}")
-        print(f"Total ARSC strings extracted: {len(arsc_strings)}")
-        print(f"XML files found: {xml_files_found}")
-        print(f"XML files with extracted strings: {xml_files_parsed}")
-        print(f"Total XML strings extracted: {len(xml_strings)}")
-        print(f"Total combined strings: {len(all_strings)}\n")
+        CYAN = '\033[36m'
+        YELLOW = '\033[33m'
+        RESET = '\033[0m'
+        print(f"{YELLOW}\n=== EXTRACTION DEBUG SUMMARY ==={RESET}")
+        print(f"{CYAN}DEX files found:{RESET} {dex_files_found}")
+        print(f"{CYAN}Total DEX strings extracted:{RESET} {len(dex_strings)}")
+        print(f"{CYAN}resources.arsc found:{RESET} {arsc_found}")
+        print(f"{CYAN}Total ARSC strings extracted:{RESET} {len(arsc_strings)}")
+        print(f"{CYAN}XML files found:{RESET} {xml_files_found}")
+        print(f"{CYAN}XML files with extracted strings:{RESET} {xml_files_parsed}")
+        print(f"{CYAN}Total XML strings extracted:{RESET} {len(xml_strings)}")
+        print(f"{CYAN}Total combined strings:{RESET} {len(all_strings)}\n")
 
     # Remove duplicates by string + source
     seen = set()
@@ -109,4 +112,6 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(strings_to_save, f, indent=2, ensure_ascii=False)
 
-    print(f"[OK] Saved {len(strings_to_save)} strings to {output_file}")
+    YELLOW = '\033[33m'
+    RESET = '\033[0m'
+    print(f"{YELLOW}[OK] Saved {len(strings_to_save)} strings to {output_file}{RESET}")

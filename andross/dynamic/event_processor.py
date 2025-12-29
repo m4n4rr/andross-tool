@@ -42,6 +42,21 @@ class StringEventProcessor:
         
         return False
     
+    def log_to_console(self, event_type, value, caller):
+        """Log a finding to console in real-time
+        
+        Args:
+            event_type: Type of event (bytes, chars, copy, etc.)
+            value: The string value found
+            caller: The calling class and method
+        """
+        # ANSI color codes
+        CYAN = '\033[36m'
+        YELLOW = '\033[33m'
+        RESET = '\033[0m'
+        
+        print(f"{CYAN}[{event_type.upper():12}]{RESET} {value[:100]:<100} {YELLOW}| {caller}{RESET}")
+    
     def process_event(self, event):
         """Process a single event from Frida
         
@@ -62,6 +77,9 @@ class StringEventProcessor:
         # Skip noise
         if self.is_noise(value):
             return
+        
+        # Log to console in real-time (before aggregation)
+        self.log_to_console(event_type, value, caller)
         
         # Create aggregation key
         key = (event_type, value, caller)
