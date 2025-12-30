@@ -42,7 +42,9 @@ Java.perform(function () {
     var StringClass   = Java.use("java.lang.String");
     var BufferedReader = Java.use("java.io.BufferedReader");
     var SharedPreferences = Java.use("android.content.SharedPreferences");
+    var AssetManager = Java.use("android.content.res.AssetManager");
 
+    
     // ===== StringFactory.newStringFromBytes =====
     StringFactory.newStringFromBytes.overload(
         '[B', 'int', 'int', 'java.nio.charset.Charset'
@@ -111,6 +113,22 @@ Java.perform(function () {
         }
         return line;
     };
+
+    // ===== AssetManager.open(String) =====
+
+    AssetManager.open.overload('java.lang.String').implementation = function (name) {
+        var is = this.open(name);
+        if (name && name.length > 0) {
+            emitEvent("asset_open", name, getAppCaller());
+        }
+        return is;
+    };
+    // ===== AssetManager.open(String, int) =====
+    AssetManager.open.overload('java.lang.String', 'int').implementation = function (name, mode) {
+        emitEvent("asset_open", name, getAppCaller());
+        return this.open(name, mode);
+    };
+
 
     // ===== SharedPreferences.getString() =====
     SharedPreferences.getString.implementation = function (key, def) {

@@ -1,8 +1,33 @@
 import sys
+import logging
+import os
 from andross.static.engine import run_static_analysis
 from andross.dynamic.engine import run_dynamic_analysis
 from andross.dynamic.manifest_parser import extract_package_from_apk
 from andross.static.patterns import get_available_patterns
+
+# Suppress androguard's loguru debug and warning output
+try:
+    from loguru import logger as loguru_logger
+    # Remove default handler and set level to ERROR (suppress DEBUG and WARNING)
+    loguru_logger.remove()
+    loguru_logger.add(sys.stderr, level="ERROR")
+except ImportError:
+    pass
+
+# Also suppress standard logging from androguard modules
+logging.getLogger("androguard").setLevel(logging.ERROR)
+logging.getLogger("androguard.core").setLevel(logging.ERROR)
+logging.getLogger("androguard.core.dex").setLevel(logging.ERROR)
+logging.getLogger("androguard.core.axml").setLevel(logging.ERROR)
+logging.getLogger("androguard.core.analysis").setLevel(logging.ERROR)
+
+# Disable propagation to prevent messages from reaching root logger
+for logger_name in ["androguard", "androguard.core", "androguard.core.dex", "androguard.core.axml", "androguard.core.analysis"]:
+    logging.getLogger(logger_name).propagate = False
+
+# Set environment variables to suppress androguard logging
+os.environ["ANDROGUARD_DEBUG"] = "0"
 
 
 def print_usage():
@@ -165,10 +190,10 @@ def main():
             
             output_file = sys.argv[output_idx + 1]
             minimal_mode = '--minimal' in sys.argv
+            debug_mode = '--debug' in sys.argv
             
             # Extract package name from APK
-            print("[*] Extracting package name from APK...")
-            package_name = extract_package_from_apk(apk_path, debug=False)
+            package_name = extract_package_from_apk(apk_path, debug=debug_mode)
             
             if not package_name:
                 print("[ERROR] Failed to extract package name from APK")

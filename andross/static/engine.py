@@ -1,10 +1,12 @@
 import os
 import zipfile
 import json
+import tempfile
 from .dex_parser import extract_strings_from_dex_bytes
 from .xml_parser import extract_strings_from_xml_bytes
 from .arsc_parser import extract_strings_from_arsc
 from .patterns import filter_by_pattern
+from ..dynamic.zip_evasion import skip_zip_evasion
 
 
 def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filter=False, pattern_filter=None):
@@ -32,41 +34,67 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
     xml_files_parsed = 0
     dex_files_found = 0
     arsc_found = False
+    zip_evasion_detected = False
 
-    with zipfile.ZipFile(apk_path, 'r') as z:
-        # Count and process DEX files
-        for f in z.namelist():
-            if f.endswith(".dex"):
-                dex_files_found += 1
-                dex_bytes = z.read(f)
-                extracted = extract_strings_from_dex_bytes(dex_bytes, f)
-                dex_strings.extend(extracted)
-                all_strings.extend(extracted)
+    # Apply ZIP evasion bypass to handle malware samples with encrypted flags
+    try:
+        apk_buffer = skip_zip_evasion(apk_path, debug=debug_mode)
+        # Check if ZIP evasion was actually needed by comparing sizes or checking for modifications
+        # If the buffer is created (not None), evasion was applied
+        if apk_buffer:
+            zip_evasion_detected = True
+            print("[*] ZIP evasion technique detected - applying skip evasion bypass...")
         
-        # Extract from resources.arsc
-        if 'resources.arsc' in z.namelist():
-            arsc_found = True
-            arsc_bytes = z.read('resources.arsc')
-            extracted = extract_strings_from_arsc(arsc_bytes, debug=debug_mode, skip_filter=skip_filter)
-            arsc_strings.extend(extracted)
-            all_strings.extend(extracted)
-        
-        # Count and process XML resource files
-        for f in z.namelist():
-            if f.startswith('res/') and f.endswith('.xml'):
-                xml_files_found += 1
-                xml_bytes = z.read(f)
-                extracted = extract_strings_from_xml_bytes(xml_bytes, f, debug=debug_mode, skip_filter=skip_filter)
-                if extracted:
-                    xml_files_parsed += 1
-                    xml_strings.extend(extracted)
+        # Write to temporary file since zipfile requires a file path
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.apk') as tmp:
+            tmp.write(apk_buffer.getvalue())
+            tmp_path = tmp.name
+        apk_to_use = tmp_path
+    except Exception as e:
+        if debug_mode:
+            print(f"[*] ZIP evasion bypass failed ({str(e)}), using original APK")
+        apk_to_use = apk_path
+
+    try:
+        with zipfile.ZipFile(apk_to_use, 'r') as z:
+            # Count and process DEX files
+            for f in z.namelist():
+                if f.endswith(".dex"):
+                    dex_files_found += 1
+                    dex_bytes = z.read(f)
+                    extracted = extract_strings_from_dex_bytes(dex_bytes, f)
+                    dex_strings.extend(extracted)
                     all_strings.extend(extracted)
+            
+            # Extract from resources.arsc
+            if 'resources.arsc' in z.namelist():
+                arsc_found = True
+                arsc_bytes = z.read('resources.arsc')
+                extracted = extract_strings_from_arsc(arsc_bytes, debug=debug_mode, skip_filter=skip_filter)
+                arsc_strings.extend(extracted)
+                all_strings.extend(extracted)
+            
+            # Count and process XML resource files
+            for f in z.namelist():
+                if f.startswith('res/') and f.endswith('.xml'):
+                    xml_files_found += 1
+                    xml_bytes = z.read(f)
+                    extracted = extract_strings_from_xml_bytes(xml_bytes, f, debug=debug_mode, skip_filter=skip_filter)
+                    if extracted:
+                        xml_files_parsed += 1
+                        xml_strings.extend(extracted)
+                        all_strings.extend(extracted)
+    finally:
+        # Clean up temporary file if created
+        if apk_to_use != apk_path and os.path.exists(apk_to_use):
+            os.unlink(apk_to_use)
 
     if debug_mode:
         CYAN = '\033[36m'
         YELLOW = '\033[33m'
         RESET = '\033[0m'
         print(f"{YELLOW}\n=== EXTRACTION DEBUG SUMMARY ==={RESET}")
+        print(f"{CYAN}ZIP evasion detected:{RESET} {zip_evasion_detected}")
         print(f"{CYAN}DEX files found:{RESET} {dex_files_found}")
         print(f"{CYAN}Total DEX strings extracted:{RESET} {len(dex_strings)}")
         print(f"{CYAN}resources.arsc found:{RESET} {arsc_found}")

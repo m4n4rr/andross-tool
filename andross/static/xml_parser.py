@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from androguard.core.bytecodes.axml import AXMLPrinter
+from androguard.core.axml import AXMLPrinter
 from .filters import is_useful_string
 
 # ================================
