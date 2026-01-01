@@ -4,7 +4,7 @@ Andross - APK Analysis Tool
 Thin wrapper that delegates to CLI module
 """
 
-from andross.cli.main import main
+from andross.cli import main
 
 if __name__ == "__main__":
     main()

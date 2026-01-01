@@ -2,11 +2,12 @@ import os
 import zipfile
 import json
 import tempfile
+
 from .dex_parser import extract_strings_from_dex_bytes
 from .xml_parser import extract_strings_from_xml_bytes
 from .arsc_parser import extract_strings_from_arsc
 from .patterns import filter_by_pattern
-from ..dynamic.zip_evasion import skip_zip_evasion
+from andross.dynamic import skip_zip_evasion
 
 
 def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filter=False, pattern_filter=None):

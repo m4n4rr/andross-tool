@@ -1,12 +1,8 @@
 import sys
 import logging
 import os
-from andross.static.engine import run_static_analysis
-from andross.dynamic.engine import run_dynamic_analysis
-from andross.dynamic.manifest_parser import extract_package_from_apk
-from andross.static.patterns import get_available_patterns
 
-# Suppress androguard's loguru debug and warning output
+# Third-party
 try:
     from loguru import logger as loguru_logger
     # Remove default handler and set level to ERROR (suppress DEBUG and WARNING)
@@ -15,8 +11,11 @@ try:
 except ImportError:
     pass
 
-# Also suppress standard logging from androguard modules
-logging.getLogger("androguard").setLevel(logging.ERROR)
+# Local
+from andross.static import run_static_analysis, get_available_patterns
+from andross.dynamic import run_dynamic_analysis, extract_package_from_apk
+
+# Suppress standard logging from androguard modules
 logging.getLogger("androguard.core").setLevel(logging.ERROR)
 logging.getLogger("androguard.core.dex").setLevel(logging.ERROR)
 logging.getLogger("androguard.core.axml").setLevel(logging.ERROR)

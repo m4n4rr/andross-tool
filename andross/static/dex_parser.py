@@ -1,6 +1,8 @@
 import re
+
 from androguard.core.dex import DEX
 from androguard.core.analysis.analysis import Analysis
+
 from .filters import is_useful_string
 
 # ================================
