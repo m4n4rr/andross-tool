@@ -1,0 +1,6 @@
+# Core dependencies
+androguard==4.1.1              
+frida==16.6.6                  
+loguru==0.7.2                
+
+# Python version: 3.11+
