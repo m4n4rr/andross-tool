@@ -15,7 +15,7 @@ def axml_to_xml_string(axml_bytes):
     try:
         printer = AXMLPrinter(axml_bytes)
         return printer.get_xml_as_string()
-    except Exception as e:
+    except Exception:
         return None
 
 # ================================

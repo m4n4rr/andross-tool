@@ -13,7 +13,8 @@ except ImportError:
 
 # Local
 from andross.static import run_static_analysis, get_available_patterns
-from andross.dynamic import run_dynamic_analysis, extract_package_from_apk
+from andross.dynamic import run_dynamic_analysis
+from andross.utils import ensure_device_ready
 
 # Suppress standard logging from androguard modules
 logging.getLogger("androguard.core").setLevel(logging.ERROR)
@@ -32,7 +33,7 @@ os.environ["ANDROGUARD_DEBUG"] = "0"
 def print_usage():
     """Print usage information"""
     print("Usage: python Andross.py --static <path/to/app.apk> [--output <path>] [--pattern <name> ...] [--debug] [--skip-filter]")
-    print("   or: python Andross.py --dynamic <path/to/app.apk> --output <path> [--minimal]")
+    print("   or: python Andross.py --dynamic <path/to/app.apk> [--output <path>] [--frida-path <path>] [--minimal] [--debug]")
     print("\nExamples:")
     print("  python Andross.py --pattern help")
     print("  python Andross.py --static app.apk --pattern md5")
@@ -60,7 +61,7 @@ def print_help():
     
     print("\033[1mSTATIC MODE OPTIONS:\033[0m")
     print("  <path/to/app.apk> Path to the APK file to analyze (required)")
-    print("  --output <path>   Save analysis results to specified file or directory")
+    print("  --output <path>   Save analysis results to specified file (optional, defaults to 'static_strings.json')")
     print("  --pattern <names> Specify patterns to search for (space-separated)")
     print("                    Use: --pattern help  (to see available patterns)")
     print("                    Use: --pattern all   (to search all patterns)")
@@ -69,20 +70,24 @@ def print_help():
     
     print("\033[1mDYNAMIC MODE OPTIONS:\033[0m")
     print("  <path/to/app.apk> Path to the APK file to analyze (required)")
-    print("  --output <path>   Save analysis results to specified file (required)")
-    print("  --minimal         Run minimal hooks (reduced instrumentation)\n")
+    print("  --output <path>   Save analysis results to specified file (optional, defaults to 'dynamic_strings.json')")
+    print("  --frida-path <p>  Path to frida-server binary (optional, auto-detected if not provided)")
+    print("  --minimal         Run minimal hooks (reduced instrumentation)")
+    print("  --debug           Enable debug output for detailed information")
     
     print("\033[1mEXAMPLES:\033[0m")
     print("  # View available patterns")
     print("  python Andross.py --pattern help\n")
-    print("  # Static analysis with specific patterns")
+    print("  # Static analysis with specific patterns (saves to static_strings.json by default)")
     print("  python Andross.py --static app.apk --pattern md5 jwt\n")
-    print("  # Static analysis with all patterns")
+    print("  # Static analysis with all patterns and custom output")
     print("  python Andross.py --static app.apk --pattern all --output results.json\n")
-    print("  # Dynamic analysis with output file")
-    print("  python Andross.py --dynamic app.apk --output results.json\n")
+    print("  # Dynamic analysis with default output (dynamic_strings.json)")
+    print("  python Andross.py --dynamic app.apk\n")
     print("  # Dynamic analysis with minimal hooks")
-    print("  python Andross.py --dynamic app.apk --output results.json --minimal\n")    
+    print("  python Andross.py --dynamic app.apk --minimal\n")
+    print("  # Dynamic analysis with custom output and frida-server path")
+    print("  python Andross.py --dynamic app.apk --output results.json --frida-path /path/to/frida-server\n")    
     print()
 
 
@@ -114,14 +119,14 @@ def main():
     elif first_arg == '--dynamic':
         mode = '--dynamic'
     else:
-        print("[ERROR] Must specify either --static or --dynamic mode as the first argument")
+        print("\033[91m[ERROR] Must specify either --static or --dynamic mode as the first argument\033[0m")
         print_usage()
         sys.exit(1)
     
     # Handle static mode
     if mode == '--static':
         if len(sys.argv) < 3:
-            print("[ERROR] Static mode requires APK path")
+            print("\033[91m[ERROR] Static mode requires APK path\033[0m")
             print("Usage: python Andross.py --static <path/to/app.apk> [--output <path>] [--pattern <name> ...] [--debug] [--skip-filter]")
             sys.exit(1)
         
@@ -129,17 +134,20 @@ def main():
         debug_mode = '--debug' in sys.argv
         skip_filter = '--skip-filter' in sys.argv
         
+        # Set FRIDA_DEBUG environment variable based on --debug flag (for consistency)
+        os.environ['FRIDA_DEBUG'] = 'true' if debug_mode else 'false'
+        
         # Check for optional --output argument
-        output_file = None
+        output_file = "static_strings.json"  # Default output file
         if '--output' in sys.argv:
             try:
                 output_idx = sys.argv.index('--output')
                 if output_idx + 1 >= len(sys.argv):
-                    print("[ERROR] --output argument requires a path")
+                    print("\033[91m[ERROR] --output argument requires a path\033[0m")
                     sys.exit(1)
                 output_file = sys.argv[output_idx + 1]
             except (ValueError, IndexError):
-                print("[ERROR] Invalid --output argument")
+                print("\033[91m[ERROR] Invalid --output argument\033[0m")
                 sys.exit(1)
         
         # Check for optional --pattern argument(s)
@@ -155,14 +163,14 @@ def main():
                     idx += 1
                 
                 if not patterns_list:
-                    print("[ERROR] --pattern argument requires at least one pattern name")
+                    print("\033[91m[ERROR] --pattern argument requires at least one pattern name\033[0m")
                     print("Use: python Andross.py --pattern help   (to see available patterns)")
                     sys.exit(1)
                 
                 # If only one pattern, keep as string; if multiple, pass as list
                 pattern_filter = patterns_list[0] if len(patterns_list) == 1 else patterns_list
             except (ValueError, IndexError):
-                print("[ERROR] Invalid --pattern argument")
+                print("\033[91m[ERROR] Invalid --pattern argument\033[0m")
                 sys.exit(1)
         
         run_static_analysis(apk_path, output_file=output_file, debug_mode=debug_mode, skip_filter=skip_filter, pattern_filter=pattern_filter)
@@ -170,39 +178,53 @@ def main():
     # Handle dynamic mode
     elif mode == '--dynamic':
         if len(sys.argv) < 3:
-            print("[ERROR] Dynamic mode requires APK path")
-            print("Usage: python Andross.py --dynamic <path/to/app.apk> --output <path> [--minimal]")
+            print("\033[91m[ERROR] Dynamic mode requires APK path\033[0m")
+            print("Usage: python Andross.py --dynamic <path/to/app.apk> [--output <path>] [--minimal] [--frida-path <path>] [--debug]")
             sys.exit(1)
         
         apk_path = sys.argv[2]
         
-        if '--output' not in sys.argv:
-            print("[ERROR] Dynamic mode requires --output argument")
-            print("Usage: python Andross.py --dynamic <path/to/app.apk> --output <path> [--minimal]")
-            sys.exit(1)
+        # Check for optional --output argument (default: dynamic_strings.json)
+        output_file = "dynamic_strings.json"
+        if '--output' in sys.argv:
+            try:
+                output_idx = sys.argv.index('--output')
+                if output_idx + 1 >= len(sys.argv):
+                    print("\033[91m[ERROR] --output argument requires a file path\033[0m")
+                    sys.exit(1)
+                output_file = sys.argv[output_idx + 1]
+            except (ValueError, IndexError):
+                print("\033[91m[ERROR] Invalid --output argument\033[0m")
+                sys.exit(1)
+        
+        minimal_mode = '--minimal' in sys.argv
+        debug_mode = '--debug' in sys.argv
+        
+        # Set FRIDA_DEBUG environment variable based on --debug flag
+        os.environ['FRIDA_DEBUG'] = 'true' if debug_mode else 'false'
+        
+        # Check for optional frida-server path
+        frida_server_path = None
+        if '--frida-path' in sys.argv:
+            try:
+                frida_idx = sys.argv.index('--frida-path')
+                if frida_idx + 1 >= len(sys.argv):
+                    print("\033[91m[ERROR] --frida-path argument requires a file path\033[0m")
+                    sys.exit(1)
+                frida_server_path = sys.argv[frida_idx + 1]
+            except (ValueError, IndexError):
+                print("\033[91m[ERROR] Invalid --frida-path argument\033[0m")
+                sys.exit(1)
         
         try:
-            output_idx = sys.argv.index('--output')
-            if output_idx + 1 >= len(sys.argv):
-                print("[ERROR] --output argument requires a file path")
+            # Step 1: Ensure device is ready (emulator online, frida-server running, app installed)
+            if not ensure_device_ready(apk_path=apk_path, frida_server_path=frida_server_path):
                 sys.exit(1)
             
-            output_file = sys.argv[output_idx + 1]
-            minimal_mode = '--minimal' in sys.argv
-            debug_mode = '--debug' in sys.argv
-            
-            # Extract package name from APK
-            package_name = extract_package_from_apk(apk_path, debug=debug_mode)
-            
-            if not package_name:
-                print("[ERROR] Failed to extract package name from APK")
-                sys.exit(1)
-            
-            print(f"[OK] Resolved package name: {package_name}")
-            
-            run_dynamic_analysis(output_file, package_name, minimal=minimal_mode)
+            # Step 2: Run dynamic analysis (device setup is already guaranteed)
+            run_dynamic_analysis(output_file, apk_path, minimal=minimal_mode)
         except Exception as e:
-            print(f"[ERROR] {e}")
+            print(f"\033[91m[ERROR] {e}\033[0m")
             sys.exit(1)
 
 

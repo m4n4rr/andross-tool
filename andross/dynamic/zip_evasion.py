@@ -29,7 +29,7 @@ def skip_zip_evasion(apk_path, debug=False):
     """
     try:
         if debug:
-            print(f"[DEBUG] Attempting to skip ZIP evasion techniques...")
+            print("\033[93m[DEBUG] Attempting to skip ZIP evasion techniques...\033[0m")
         
         normalized_apk = BytesIO()
         
@@ -46,11 +46,11 @@ def skip_zip_evasion(apk_path, debug=False):
                     zout.writestr(item, data)
         
         if debug:
-            print(f"[DEBUG] Successfully normalized APK, buffer size: {len(normalized_apk.getvalue())} bytes")
+            print(f"\033[93m[DEBUG] Successfully normalized APK, buffer size: {len(normalized_apk.getvalue())} bytes\033[0m")
         
         return normalized_apk
         
     except Exception as e:
         if debug:
-            print(f"[DEBUG] Failed to skip ZIP evasion: {type(e).__name__}: {e}")
+            print(f"\033[91m[DEBUG] Failed to skip ZIP evasion: {type(e).__name__}: {e}\033[0m")
         return None

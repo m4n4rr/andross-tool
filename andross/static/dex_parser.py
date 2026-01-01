@@ -1,8 +1,6 @@
 import re
 
 from androguard.core.dex import DEX
-from androguard.core.analysis.analysis import Analysis
-
 from .filters import is_useful_string
 
 # ================================
@@ -31,7 +29,6 @@ def extract_coroutine_method_name(class_name, method_name):
 def extract_strings_from_dex_bytes(dex_bytes, dex_name):
     try:
         d = DEX(dex_bytes)
-        x = Analysis(d)
         all_strings = []
 
         for cls in d.get_classes():

@@ -24,7 +24,7 @@ def extract_package_from_apk(apk_path, debug=False):
     Returns:
         str: Package name if found, None otherwise
     """
-    print(f"[*] Extracting package name from APK...")
+    print("\033[93m[*] Extracting package name from APK...\033[0m")
     
     # First attempt: normal extraction
     result = _extract_from_zipfile(apk_path, None, debug)
@@ -32,17 +32,17 @@ def extract_package_from_apk(apk_path, debug=False):
         return result
     
     # Second attempt: skip ZIP evasion techniques
-    print(f"[*] Detected ZIP evasion technique, attempting to skip...")
+    print("\033[93m[*] Detected ZIP evasion technique, attempting to skip...\033[0m")
     normalized_apk = skip_zip_evasion(apk_path, debug)
     
     if normalized_apk is not None:
         result = _extract_from_zipfile(None, normalized_apk, debug)
         if result is not None:
-            print(f"[OK] Successfully bypassed ZIP evasion technique")
+            print("\033[92m[OK] Successfully bypassed ZIP evasion technique\033[0m")
             return result
     
     # Both attempts failed
-    print(f"[ERROR] Failed to extract package name from APK")
+    print("\033[91m[ERROR] Failed to extract package name from APK\033[0m")
     return None
 
 
@@ -69,14 +69,14 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
         with z:
             if 'AndroidManifest.xml' not in z.namelist():
                 if debug:
-                    print(f"[DEBUG] AndroidManifest.xml not found in APK")
+                    print("[DEBUG] AndroidManifest.xml not found in APK")
                 return None
             
             manifest_bytes = z.read('AndroidManifest.xml')
             
             if debug:
-                print(f"[DEBUG] Read {len(manifest_bytes)} bytes from AndroidManifest.xml")
-                print(f"[DEBUG] First 20 bytes (hex): {manifest_bytes[:20].hex()}")
+                print("[DEBUG] Read {len(manifest_bytes)} bytes from AndroidManifest.xml")
+                print("[DEBUG] First 20 bytes (hex): {manifest_bytes[:20].hex()}")
             
             # Check if it looks like binary AXML
             is_binary_axml = manifest_bytes[:4] == b'\x03\x00\x08\x00' or manifest_bytes[:4] == b'\x00\x03\x00\x08'
@@ -90,7 +90,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             if is_binary_axml:
                 try:
                     if debug:
-                        print(f"[DEBUG] Attempting AXMLPrinter parsing...")
+                        print("[DEBUG] Attempting AXMLPrinter parsing...")
                     printer = AXMLPrinter(manifest_bytes)
                     
                     # get_buff() returns UTF-8 encoded bytes
@@ -109,7 +109,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             if manifest_string is None and apk_path is not None:
                 try:
                     if debug:
-                        print(f"[DEBUG] Attempting androguard APK parser...")
+                        print("[DEBUG] Attempting androguard APK parser...")
                     apk = APK(apk_path)
                     package_name = apk.get_package()
                     
@@ -119,7 +119,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
                         return package_name
                     else:
                         if debug:
-                            print(f"[DEBUG] APK parser found no package name")
+                            print("[DEBUG] APK parser found no package name")
                 except Exception as e:
                     if debug:
                         print(f"[DEBUG] APK parser failed: {type(e).__name__}: {e}")
@@ -128,7 +128,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             if manifest_string is None and apk_buffer is not None:
                 try:
                     if debug:
-                        print(f"[DEBUG] Attempting androguard APK parser with buffer...")
+                        print("[DEBUG] Attempting androguard APK parser with buffer...")
                     
                     # Write buffer to temporary file since APK class requires a file path
                     with tempfile.NamedTemporaryFile(suffix='.apk', delete=False) as tmp_file:
@@ -146,12 +146,12 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
                             return package_name
                         else:
                             if debug:
-                                print(f"[DEBUG] APK parser (buffer) found no package name")
+                                print("[DEBUG] APK parser (buffer) found no package name")
                     finally:
                         # Clean up temporary file
                         try:
                             os.unlink(tmp_path)
-                        except:
+                        except Exception:
                             pass
                 except Exception as e:
                     if debug:
@@ -161,7 +161,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             if manifest_string is None:
                 try:
                     if debug:
-                        print(f"[DEBUG] Attempting binary pattern search for package name...")
+                        print("[DEBUG] Attempting binary pattern search for package name...")
                     
                     # Search for common package name patterns in the binary data
                     # Package names typically follow Java naming: com.example.app
@@ -181,7 +181,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
                                 return potential_package
                     
                     if debug:
-                        print(f"[DEBUG] Binary pattern search found no valid package names")
+                        print("[DEBUG] Binary pattern search found no valid package names")
                 except Exception as e:
                     if debug:
                         print(f"[DEBUG] Binary pattern search failed: {type(e).__name__}: {e}")
@@ -192,7 +192,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             if manifest_string is None and not is_binary_axml:
                 try:
                     if debug:
-                        print(f"[DEBUG] Attempting text XML decoding...")
+                        print("[DEBUG] Attempting text XML decoding...")
                     manifest_string = manifest_bytes.decode('utf-8', errors='ignore')
                     if debug:
                         print(f"[DEBUG] Text decode got {len(manifest_string)} characters")
@@ -203,7 +203,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             
             if not manifest_string or manifest_string.strip() == '':
                 if debug:
-                    print(f"[DEBUG] Manifest XML is empty after parsing")
+                    print("[DEBUG] Manifest XML is empty after parsing")
                 return None
             
             # Parse the XML
@@ -220,7 +220,7 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             
             if not package_name:
                 if debug:
-                    print(f"[DEBUG] Could not extract package name from manifest")
+                    print("[DEBUG] Could not extract package name from manifest")
                     print(f"[DEBUG] Root tag: {root.tag}")
                     print(f"[DEBUG] Root attributes: {root.attrib}")
                 return None

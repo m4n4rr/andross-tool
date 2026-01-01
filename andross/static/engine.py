@@ -44,7 +44,7 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
         # If the buffer is created (not None), evasion was applied
         if apk_buffer:
             zip_evasion_detected = True
-            print("[*] ZIP evasion technique detected - applying skip evasion bypass...")
+            print("\033[93m[*] ZIP evasion technique detected - applying skip evasion bypass...\033[0m")
         
         # Write to temporary file since zipfile requires a file path
         with tempfile.NamedTemporaryFile(delete=False, suffix='.apk') as tmp:
@@ -53,7 +53,7 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
         apk_to_use = tmp_path
     except Exception as e:
         if debug_mode:
-            print(f"[*] ZIP evasion bypass failed ({str(e)}), using original APK")
+            print(f"\033[93m[*] ZIP evasion bypass failed ({str(e)}), using original APK\033[0m")
         apk_to_use = apk_path
 
     try:
