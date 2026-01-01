@@ -32,7 +32,7 @@ def run_dynamic_analysis(output_file, package_name, minimal=False):
     mode_label = "minimal" if minimal else "full"
     print(f"[*] Starting Frida dynamic analysis ({mode_label} mode)...")
     print(f"[*] Target package: {package_name}")
-    print(f"[*] Press Ctrl+C to stop the analysis")
+    print("[*] Press Ctrl+C to stop the analysis")
     
     # Initialize event processor
     processor = StringEventProcessor()
@@ -50,7 +50,7 @@ def run_dynamic_analysis(output_file, package_name, minimal=False):
         
         # Process output line by line
         event_count = 0
-        print(f"[*] Listening for string events...")
+        print("[*] Listening for string events...")
         
         # Track time to detect if Frida attached to device
         start_time = time.time()
@@ -88,17 +88,17 @@ def run_dynamic_analysis(output_file, package_name, minimal=False):
             # Check for timeout if no events received yet
             if event_count == 0 and elapsed > attachment_timeout:
                 print(f"\n[ERROR] Timeout: Frida did not attach to any device within {attachment_timeout} seconds")
-                print(f"[ERROR] No Android emulator or device detected")
-                print(f"[*] Make sure:")
-                print(f"    1. An Android emulator is running")
-                print(f"    2. USB debugging is enabled (for physical devices)")
-                print(f"    3. Run: adb devices (to check connected devices)")
+                print("[ERROR] No Android emulator or device detected")
+                print("[*] Make sure:")
+                print("    1. An Android emulator is running")
+                print("    2. USB debugging is enabled (for physical devices)")
+                print("    3. Run: adb devices (to check connected devices)")
                 
                 if process and process.poll() is None:
                     try:
                         process.terminate()
                         process.wait(timeout=3)
-                    except:
+                    except Exception:
                         process.kill()
                 
                 return False
@@ -125,19 +125,19 @@ def run_dynamic_analysis(output_file, package_name, minimal=False):
         
         # Check return code
         if process.returncode == 0:
-            print(f"[OK] Frida session completed successfully")
+            print("[OK] Frida session completed successfully")
         else:
             print(f"[WARNING] Frida session ended with exit code {process.returncode}")
             
             if not minimal and event_count < 10:
-                print(f"\n[*] SUGGESTION: Try again with --minimal flag to reduce memory pressure:")
+                print("\n[*] SUGGESTION: Try again with --minimal flag to reduce memory pressure:")
                 print(f"    python Andross.py --dynamic <path/to/app.apk> --output {output_file} --minimal")
         
         # Process and save results
         aggregated_data = processor.get_aggregated_data(package_name)
         stats = processor.get_statistics()
         
-        print(f"\n[*] Processing results:")
+        print("\n[*] Processing results:")
         print(f"    Total events received: {stats['total_events']}")
         print(f"    Unique string combinations: {stats['unique_combinations']}")
         print(f"    Total deduplicated count: {stats['aggregated_count']}")
