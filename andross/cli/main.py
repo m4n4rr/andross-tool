@@ -184,6 +184,11 @@ def main():
         
         apk_path = sys.argv[2]
         
+        # Check if APK file exists
+        if not os.path.exists(apk_path):
+            print(f"\033[91m[ERROR] APK not found: {apk_path}\033[0m")
+            sys.exit(1)
+        
         # Check for optional --output argument (default: dynamic_strings.json)
         output_file = "dynamic_strings.json"
         if '--output' in sys.argv:

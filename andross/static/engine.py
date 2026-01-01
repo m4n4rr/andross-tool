@@ -22,7 +22,7 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
     """
     
     if not os.path.exists(apk_path):
-        print("[ERROR] APK not found")
+        print("\033[91m[ERROR] APK not found\033[0m")
         return
 
     all_strings = []
