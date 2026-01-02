@@ -230,9 +230,10 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
             
             return package_name
             
-    except zipfile.BadZipFile as e:
+    except (zipfile.BadZipFile, RuntimeError) as e:
         if debug:
-            print(f"[DEBUG] BadZipFile error: {e}")
+            error_reason = "encrypted files detected" if isinstance(e, RuntimeError) and "encrypted" in str(e) else "BadZipFile error"
+            print(f"[DEBUG] {error_reason}: {e}")
         return None
     except FileNotFoundError as e:
         if debug:
@@ -242,3 +243,4 @@ def _extract_from_zipfile(apk_path, apk_buffer, debug=False):
         if debug:
             print(f"[DEBUG] Unexpected error: {type(e).__name__}: {e}")
         return None
+

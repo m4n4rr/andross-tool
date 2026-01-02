@@ -37,27 +37,10 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
     arsc_found = False
     zip_evasion_detected = False
 
-    # Apply ZIP evasion bypass to handle malware samples with encrypted flags
+    # Try normal ZIP analysis first
+    apk_to_use = apk_path
     try:
-        apk_buffer = skip_zip_evasion(apk_path, debug=debug_mode)
-        # Check if ZIP evasion was actually needed by comparing sizes or checking for modifications
-        # If the buffer is created (not None), evasion was applied
-        if apk_buffer:
-            zip_evasion_detected = True
-            print("\033[93m[*] ZIP evasion technique detected - applying skip evasion bypass...\033[0m")
-        
-        # Write to temporary file since zipfile requires a file path
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.apk') as tmp:
-            tmp.write(apk_buffer.getvalue())
-            tmp_path = tmp.name
-        apk_to_use = tmp_path
-    except Exception as e:
-        if debug_mode:
-            print(f"\033[93m[*] ZIP evasion bypass failed ({str(e)}), using original APK\033[0m")
-        apk_to_use = apk_path
-
-    try:
-        with zipfile.ZipFile(apk_to_use, 'r') as z:
+        with zipfile.ZipFile(apk_path, 'r') as z:
             # Count and process DEX files
             for f in z.namelist():
                 if f.endswith(".dex"):
@@ -85,9 +68,61 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
                         xml_files_parsed += 1
                         xml_strings.extend(extracted)
                         all_strings.extend(extracted)
+    except (zipfile.BadZipFile, RuntimeError) as e:
+        # Normal ZIP parsing failed (BadZipFile) or files are encrypted (RuntimeError), try ZIP evasion bypass
+        if debug_mode:
+            error_reason = "encrypted files detected" if isinstance(e, RuntimeError) and "encrypted" in str(e) else "ZIP parsing failed"
+            print(f"\033[93m[*] {error_reason}, attempting ZIP evasion bypass...\033[0m")
+        
+        try:
+            apk_buffer = skip_zip_evasion(apk_path, debug=debug_mode)
+            if apk_buffer:
+                zip_evasion_detected = True
+                print("\033[93m[*] ZIP evasion technique detected - applying skip evasion bypass...\033[0m")
+                
+                # Write to temporary file since zipfile requires a file path
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.apk') as tmp:
+                    tmp.write(apk_buffer.getvalue())
+                    tmp_path = tmp.name
+                apk_to_use = tmp_path
+                
+                # Retry analysis with normalized APK
+                with zipfile.ZipFile(apk_to_use, 'r') as z:
+                    # Count and process DEX files
+                    for f in z.namelist():
+                        if f.endswith(".dex"):
+                            dex_files_found += 1
+                            dex_bytes = z.read(f)
+                            extracted = extract_strings_from_dex_bytes(dex_bytes, f)
+                            dex_strings.extend(extracted)
+                            all_strings.extend(extracted)
+                    
+                    # Extract from resources.arsc
+                    if 'resources.arsc' in z.namelist():
+                        arsc_found = True
+                        arsc_bytes = z.read('resources.arsc')
+                        extracted = extract_strings_from_arsc(arsc_bytes, debug=debug_mode, skip_filter=skip_filter)
+                        arsc_strings.extend(extracted)
+                        all_strings.extend(extracted)
+                    
+                    # Count and process XML resource files
+                    for f in z.namelist():
+                        if f.startswith('res/') and f.endswith('.xml'):
+                            xml_files_found += 1
+                            xml_bytes = z.read(f)
+                            extracted = extract_strings_from_xml_bytes(xml_bytes, f, debug=debug_mode, skip_filter=skip_filter)
+                            if extracted:
+                                xml_files_parsed += 1
+                                xml_strings.extend(extracted)
+                                all_strings.extend(extracted)
+        except Exception as e:
+            if debug_mode:
+                print(f"\033[91m[ERROR] ZIP evasion bypass failed: {str(e)}\033[0m")
+            # Continue with original APK attempt already done above
     finally:
         # Clean up temporary file if created
         if apk_to_use != apk_path and os.path.exists(apk_to_use):
+
             os.unlink(apk_to_use)
 
     if debug_mode:
