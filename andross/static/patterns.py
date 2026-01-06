@@ -80,7 +80,10 @@ def filter_by_pattern(strings, pattern_names):
         for pattern_name in applied_patterns:
             regex = patterns[pattern_name]
             if regex.fullmatch(normalized_value):
-                filtered.append(s)
+                # Create a copy of the string object and add the pattern field
+                matched_string = s.copy()
+                matched_string["pattern"] = pattern_name
+                filtered.append(matched_string)
                 break  # Only add once even if matches multiple patterns
     
     return filtered, applied_patterns

@@ -72,7 +72,7 @@ def run_dynamic_analysis(output_file, apk_path, minimal=False):
         
         # Track time to detect if Frida attached to device
         start_time = time.time()
-        attachment_timeout = 5  # seconds to wait for first event
+        attachment_timeout = 10  # seconds to wait for first event
         first_event_received = False
         
         # Function to read output in a separate thread
