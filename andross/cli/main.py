@@ -17,6 +17,7 @@ except ImportError:
 # Local
 from andross.static import run_static_analysis, get_available_patterns
 from andross.dynamic import run_dynamic_analysis
+from andross.hybrid import run_hybrid_analysis
 from andross.utils import ensure_device_ready
 
 # Suppress standard logging from androguard modules
@@ -37,6 +38,7 @@ def print_usage():
     """Print usage information"""
     print("Usage: python Andross.py --static <path/to/app.apk> [--output <path>] [--pattern <name> ...] [--debug] [--skip-filter]")
     print("   or: python Andross.py --dynamic <path/to/app.apk> [--output <path>] [--frida-path <path>] [--minimal] [--debug]")
+    print("   or: python Andross.py --hybrid <path/to/app.apk> [--output <path>] [--frida-path <path>] [--debug] [--skip-filter]")
     print("\nExamples:")
     print("  python Andross.py --pattern help")
     print("  python Andross.py --static app.apk --pattern md5")
@@ -51,8 +53,8 @@ def print_help():
     print("="*70)
     
     print("\n\033[1mDESCRIPTION:\033[0m")
-    print("  Andross is a comprehensive APK analysis tool that supports both")
-    print("  static and dynamic analysis modes for security research.\n")
+    print("  Andross is a comprehensive APK analysis tool that supports static,")
+    print("  dynamic, and hybrid analysis modes for security research.\n")
     
     print("\033[1mUSAGE:\033[0m")
     print("  python Andross.py [MODE] [OPTIONS]\n")
@@ -60,6 +62,7 @@ def print_help():
     print("\033[1mMODES:\033[0m")
     print("  --static          Perform static analysis on the APK file")
     print("  --dynamic         Perform dynamic analysis on the APK file")
+    print("  --hybrid          Perform hybrid analysis (dynamic + static on intercepted DEX)")
     print("  --help, -h        Display this help message")
     print("  --version         Display the version number and exit\n")
     
@@ -77,7 +80,14 @@ def print_help():
     print("  --output <path>   Save analysis results to specified file (optional, defaults to 'dynamic_strings.json')")
     print("  --frida-path <p>  Path to frida-server binary (optional, auto-detected if not provided)")
     print("  --minimal         Run minimal hooks (reduced instrumentation)")
+    print("  --debug           Enable debug output for detailed information\n")
+    
+    print("\033[1mHYBRID MODE OPTIONS:\033[0m")
+    print("  <path/to/app.apk> Path to the APK file to analyze (required)")
+    print("  --output <path>   Save analysis results to specified file (optional, defaults to 'hybrid_strings.json')")
+    print("  --frida-path <p>  Path to frida-server binary (optional, auto-detected if not provided)")
     print("  --debug           Enable debug output for detailed information")
+    print("  --skip-filter     Skip result filtering and show all raw findings")
     
     print("\033[1mEXAMPLES:\033[0m")
     print("  # View available patterns")
@@ -139,13 +149,15 @@ def main():
         sys.exit(0)
     
     # Check if first argument is a mode flag
-    # Determine mode - MUST be --static or --dynamic
+    # Determine mode - MUST be --static, --dynamic, or --hybrid
     if first_arg == '--static':
         mode = '--static'
     elif first_arg == '--dynamic':
         mode = '--dynamic'
+    elif first_arg == '--hybrid':
+        mode = '--hybrid'
     else:
-        print("\033[91m[ERROR] Must specify either --static or --dynamic mode as the first argument\033[0m")
+        print("\033[91m[ERROR] Must specify either --static, --dynamic, or --hybrid mode as the first argument\033[0m")
         print_usage()
         sys.exit(1)
     
@@ -254,6 +266,63 @@ def main():
             
             # Step 2: Run dynamic analysis (device setup is already guaranteed)
             run_dynamic_analysis(output_file, apk_path, minimal=minimal_mode)
+        except Exception as e:
+            print(f"\033[91m[ERROR] {e}\033[0m")
+            sys.exit(1)
+    
+    # Handle hybrid mode
+    elif mode == '--hybrid':
+        if len(sys.argv) < 3:
+            print("\033[91m[ERROR] Hybrid mode requires APK path\033[0m")
+            print("Usage: python Andross.py --hybrid <path/to/app.apk> [--output <path>] [--frida-path <path>] [--debug] [--skip-filter]")
+            sys.exit(1)
+        
+        apk_path = sys.argv[2]
+        
+        # Check if APK file exists
+        if not os.path.exists(apk_path):
+            print(f"\033[91m[ERROR] APK not found: {apk_path}\033[0m")
+            sys.exit(1)
+        
+        # Check for optional --output argument (default: hybrid_strings.json)
+        output_file = "hybrid_strings.json"
+        if '--output' in sys.argv:
+            try:
+                output_idx = sys.argv.index('--output')
+                if output_idx + 1 >= len(sys.argv):
+                    print("\033[91m[ERROR] --output argument requires a file path\033[0m")
+                    sys.exit(1)
+                output_file = sys.argv[output_idx + 1]
+            except (ValueError, IndexError):
+                print("\033[91m[ERROR] Invalid --output argument\033[0m")
+                sys.exit(1)
+        
+        debug_mode = '--debug' in sys.argv
+        skip_filter = '--skip-filter' in sys.argv
+        
+        # Set FRIDA_DEBUG environment variable based on --debug flag
+        os.environ['FRIDA_DEBUG'] = 'true' if debug_mode else 'false'
+        
+        # Check for optional frida-server path
+        frida_server_path = None
+        if '--frida-path' in sys.argv:
+            try:
+                frida_idx = sys.argv.index('--frida-path')
+                if frida_idx + 1 >= len(sys.argv):
+                    print("\033[91m[ERROR] --frida-path argument requires a file path\033[0m")
+                    sys.exit(1)
+                frida_server_path = sys.argv[frida_idx + 1]
+            except (ValueError, IndexError):
+                print("\033[91m[ERROR] Invalid --frida-path argument\033[0m")
+                sys.exit(1)
+        
+        try:
+            # Step 1: Ensure device is ready (emulator online, frida-server running, app installed)
+            if not ensure_device_ready(apk_path=apk_path, frida_server_path=frida_server_path, debug_mode=debug_mode):
+                sys.exit(1)
+            
+            # Step 2: Run hybrid analysis (device setup is already guaranteed)
+            run_hybrid_analysis(output_file, apk_path, debug_mode=debug_mode, skip_filter=skip_filter, frida_server_path=frida_server_path)
         except Exception as e:
             print(f"\033[91m[ERROR] {e}\033[0m")
             sys.exit(1)
