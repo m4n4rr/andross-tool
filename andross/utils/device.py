@@ -9,7 +9,6 @@ Exposes a single ensure_device_ready() entry point that guarantees:
 No mixing of analysis logic - pure device setup.
 """
 
-import os
 import sys
 
 from .emulator import ensure_emulator_online, ensure_device_rooted
