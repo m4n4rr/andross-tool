@@ -1,69 +1,138 @@
-import struct
+import io
+import tempfile
+import os
+from androguard.core.apk import APK
+from .filters import is_useful_string
 
-STRING_POOL_TYPE = 0x0001
-UTF8_FLAG = 0x00000100
-
-def parse_string_pool(data, offset, debug=False):
-    try:
-        chunk_type, header_size, chunk_size = struct.unpack_from("<HHI", data, offset)
-        if chunk_type != STRING_POOL_TYPE:
-            return []
-
-        string_count, style_count, flags, strings_start, styles_start = struct.unpack_from(
-            "<IIIII", data, offset + 8
-        )
-        is_utf8 = bool(flags & UTF8_FLAG)
-        offsets_base = offset + header_size
-        strings_base = offset + strings_start
-
-        strings = []
-        for i in range(string_count):
-            str_offset = struct.unpack_from("<I", data, offsets_base + i * 4)[0]
-            pos = strings_base + str_offset
-
-            if is_utf8:
-                u16_len = data[pos]
-                u8_len = data[pos + 1]
-                pos += 2
-                value = data[pos:pos + u8_len].decode("utf-8", errors="ignore")
-            else:
-                u16_len = struct.unpack_from("<H", data, pos)[0]
-                pos += 2
-                value = data[pos:pos + u16_len * 2].decode("utf-16le", errors="ignore")
-
-            if value:
-                strings.append(value)
-        return strings
-    except Exception:
-        return []
-
-def is_printable_ascii(s):
-    for c in s:
-        if ord(c) < 32 or ord(c) > 126:
-            return False
-    return True
 
 def extract_strings_from_arsc(data, debug=False, skip_filter=False):
     """
-    data: bytes of resources.arsc
-    Returns: list of dicts compatible with main() unique_strings
+    Extract strings from resources.arsc using androguard.
+    
+    Args:
+        data: Raw bytes from z.read('resources.arsc')
+        debug: Enable debug output
+        skip_filter: Skip is_useful_string() filtering
+    
+    Returns: list of dicts with format:
+        {
+            "string": <string_value>,
+            "source": "resources.arsc",
+            "resource_name": <resource_name>,  # e.g., "support_email"
+            "resource_type": <resource_type>   # e.g., "string"
+        }
     """
     all_strings = []
-
-    for offset in range(0, len(data) - 8, 4):
-        chunk_type = struct.unpack_from("<H", data, offset)[0]
-        if chunk_type == STRING_POOL_TYPE:
-            strings = parse_string_pool(data, offset, debug)
-            if strings:
-                all_strings.extend(strings)
-
-
-    output = []
-    for s in all_strings:
-        if skip_filter or is_printable_ascii(s):
-            output.append({
-                "string": s,
-                "source": "resources.arsc",
-            })
-
-    return output
+    tmp_path = None
+    
+    try:
+        import sys
+        import zipfile
+        
+        # Redirect stderr to suppress androguard's verbose logging
+        old_stderr = sys.stderr
+        sys.stderr = io.StringIO()
+        
+        try:
+            # Create temporary APK file from resources.arsc bytes
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.apk') as tmp:
+                with zipfile.ZipFile(tmp.name, 'w') as zf:
+                    zf.writestr('resources.arsc', data)
+                tmp_path = tmp.name
+            
+            # Load APK from temporary file
+            apk = APK(tmp_path)
+            
+            # Get the resource parser from APK
+            parser = apk.get_android_resources()
+            if parser is None:
+                if debug:
+                    print("[ARSC DEBUG] No resources found in APK")
+                return []
+            
+            # Get resolved strings (which gives us localized strings with resource IDs as keys)
+            resolved = parser.get_resolved_strings()
+            if not resolved:
+                if debug:
+                    print("[ARSC DEBUG] No resolved strings found")
+                return []
+            
+            # Get package name
+            packages = parser.get_packages_names()
+            if not packages:
+                if debug:
+                    print("[ARSC DEBUG] No package names found")
+                return []
+            
+            pkg = packages[0]
+            strings_data = resolved.get(pkg, {})
+            if not strings_data:
+                if debug:
+                    print(f"[ARSC DEBUG] No string data for package {pkg}")
+                return []
+            
+            # Extract strings from the DEFAULT locale (or first available)
+            locale = 'DEFAULT' if 'DEFAULT' in strings_data else next(iter(strings_data.keys()), None)
+            if not locale or locale not in strings_data:
+                if debug:
+                    print("[ARSC DEBUG] No locale found in strings_data")
+                return []
+            
+            locale_strings = strings_data[locale]
+            
+            # Extract each string with its resource name and type
+            for res_id, res_value in locale_strings.items():
+                try:
+                    # Apply filter if needed
+                    if not skip_filter and not is_useful_string(res_value):
+                        continue
+                    
+                    # Get resource name and type using get_resource_xml_name
+                    xml_name = parser.get_resource_xml_name(res_id)
+                    # xml_name format: "@package:type/name"
+                    res_type = ""
+                    res_name = ""
+                    
+                    if ':' in xml_name:
+                        parts = xml_name.split(':')
+                        type_and_name = parts[1] if len(parts) > 1 else ''
+                        if '/' in type_and_name:
+                            res_type, res_name = type_and_name.split('/', 1)
+                            res_name = res_name.strip()
+                            res_type = res_type.strip()
+                    
+                    all_strings.append({
+                        "string": res_value,
+                        "source": "resources.arsc",
+                        "resource_name": res_name,
+                        "resource_type": res_type
+                    })
+                
+                except Exception as e:
+                    if debug:
+                        print(f"[ARSC DEBUG] Error processing resource ID {res_id}: {e}")
+                    continue
+            
+            if debug and all_strings:
+                print(f"[ARSC DEBUG] {len(all_strings)} strings extracted from resources.arsc")
+            
+            return all_strings
+        
+        finally:
+            # Restore stderr
+            sys.stderr = old_stderr
+    
+    except Exception as e:
+        if debug:
+            import traceback
+            print(f"[ERROR] ARSC extraction failed: {e}")
+            traceback.print_exc()
+        return []
+    
+    finally:
+        # Clean up temporary file
+        if tmp_path and os.path.exists(tmp_path):
+            try:
+                os.remove(tmp_path)
+            except Exception:
+                pass

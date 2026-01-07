@@ -2,6 +2,9 @@ import sys
 import logging
 import os
 
+# Version constant
+__version__ = "1.0.0"
+
 # Third-party
 try:
     from loguru import logger as loguru_logger
@@ -57,7 +60,8 @@ def print_help():
     print("\033[1mMODES:\033[0m")
     print("  --static          Perform static analysis on the APK file")
     print("  --dynamic         Perform dynamic analysis on the APK file")
-    print("  --help, -h        Display this help message\n")
+    print("  --help, -h        Display this help message")
+    print("  --version         Display the version number and exit\n")
     
     print("\033[1mSTATIC MODE OPTIONS:\033[0m")
     print("  <path/to/app.apk> Path to the APK file to analyze (required)")
@@ -115,8 +119,13 @@ def main():
         print_usage()
         sys.exit(1)
     
-    # Check if help is requested
+    # Check if version is requested
     first_arg = sys.argv[1]
+    if first_arg == '--version':
+        print(f"Andross {__version__}")
+        sys.exit(0)
+    
+    # Check if help is requested
     if first_arg in ['--help', '-h', 'help']:
         print_help()
         sys.exit(0)
@@ -240,7 +249,7 @@ def main():
         
         try:
             # Step 1: Ensure device is ready (emulator online, frida-server running, app installed)
-            if not ensure_device_ready(apk_path=apk_path, frida_server_path=frida_server_path):
+            if not ensure_device_ready(apk_path=apk_path, frida_server_path=frida_server_path, debug_mode=debug_mode):
                 sys.exit(1)
             
             # Step 2: Run dynamic analysis (device setup is already guaranteed)
