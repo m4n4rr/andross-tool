@@ -66,7 +66,7 @@ def is_emulator_online() -> bool:
         
         # Check if any device is listed with 'emulator' in name
         for line in stdout.split('\n'):
-            if line.strip() and 'device' in line and 'emulator' in line:
+            if line.strip() and 'device' in line :
                 return True
         return False
     except Exception:

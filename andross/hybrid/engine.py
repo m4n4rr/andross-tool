@@ -11,7 +11,6 @@ import json
 import time
 
 from andross.dynamic.manifest_parser import extract_package_from_apk
-from andross.dynamic.event_processor import StringEventProcessor
 from andross.static.dex_parser import extract_strings_from_dex_bytes
 from andross.static.patterns import filter_by_pattern
 
@@ -116,9 +115,6 @@ def _run_dex_interception(apk_path, package_name, debug_mode, frida_server_path)
     
     print(f"\033[93m[*] Loading DEX interceptor script: {script_path}\033[0m")
     
-    with open(script_path, 'r') as f:
-        frida_script = f.read()
-    
     # Build Frida command
     frida_cmd = ['frida', '-U', '-f', package_name, '-l', script_path]
     
@@ -129,7 +125,7 @@ def _run_dex_interception(apk_path, package_name, debug_mode, frida_server_path)
     intercepted_bytes = None
     
     try:
-        print(f"\033[93m[*] Launching app with Frida for DEX interception...\033[0m")
+        print("\033[93m[*] Launching app with Frida for DEX interception...\033[0m")
         
         # Run Frida for 30 seconds to give app time to load DEX
         process = subprocess.Popen(
