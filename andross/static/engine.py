@@ -8,21 +8,13 @@ from .xml_parser import extract_strings_from_xml_bytes
 from .arsc_parser import extract_strings_from_arsc
 from .patterns import filter_by_pattern
 from andross.dynamic import skip_zip_evasion
+from ..utils.logger import error, info, ok
 
 
 def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filter=False, pattern_filter=None):
-    """Run static analysis on APK file
-    
-    Args:
-        apk_path: Path to APK file
-        output_file: Path where to save JSON results. If None, defaults to useful_strings.json
-        debug_mode: Enable debug output
-        skip_filter: Skip string filtering
-        pattern_filter: Optional pattern name to filter results by
-    """
-    
+
     if not os.path.exists(apk_path):
-        print("\033[91m[ERROR] APK not found\033[0m")
+        error("APK not found")
         return
 
     all_strings = []
@@ -72,13 +64,13 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
         # Normal ZIP parsing failed (BadZipFile) or files are encrypted (RuntimeError), try ZIP evasion bypass
         if debug_mode:
             error_reason = "encrypted files detected" if isinstance(e, RuntimeError) and "encrypted" in str(e) else "ZIP parsing failed"
-            print(f"\033[93m[*] {error_reason}, attempting ZIP evasion bypass...\033[0m")
+            info(f"{error_reason}, attempting ZIP evasion bypass...")
         
         try:
             apk_buffer = skip_zip_evasion(apk_path, debug=debug_mode)
             if apk_buffer:
                 zip_evasion_detected = True
-                print("\033[93m[*] ZIP evasion technique detected - applying skip evasion bypass...\033[0m")
+                info("ZIP evasion technique detected - applying skip evasion bypass...")
                 
                 # Write to temporary file since zipfile requires a file path
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.apk') as tmp:
@@ -117,7 +109,7 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
                                 all_strings.extend(extracted)
         except Exception as e:
             if debug_mode:
-                print(f"\033[91m[ERROR] ZIP evasion bypass failed: {str(e)}\033[0m")
+                error(f"ZIP evasion bypass failed: {str(e)}")
             # Continue with original APK attempt already done above
     finally:
         # Clean up temporary file if created
@@ -126,19 +118,16 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
             os.unlink(apk_to_use)
 
     if debug_mode:
-        CYAN = '\033[36m'
-        YELLOW = '\033[33m'
-        RESET = '\033[0m'
-        print(f"{YELLOW}\n=== EXTRACTION DEBUG SUMMARY ==={RESET}")
-        print(f"{CYAN}ZIP evasion detected:{RESET} {zip_evasion_detected}")
-        print(f"{CYAN}DEX files found:{RESET} {dex_files_found}")
-        print(f"{CYAN}Total DEX strings extracted:{RESET} {len(dex_strings)}")
-        print(f"{CYAN}resources.arsc found:{RESET} {arsc_found}")
-        print(f"{CYAN}Total ARSC strings extracted:{RESET} {len(arsc_strings)}")
-        print(f"{CYAN}XML files found:{RESET} {xml_files_found}")
-        print(f"{CYAN}XML files with extracted strings:{RESET} {xml_files_parsed}")
-        print(f"{CYAN}Total XML strings extracted:{RESET} {len(xml_strings)}")
-        print(f"{CYAN}Total combined strings:{RESET} {len(all_strings)}\n")
+        info("\n=== EXTRACTION DEBUG SUMMARY ===")
+        info(f"ZIP evasion detected: {zip_evasion_detected}")
+        info(f"DEX files found: {dex_files_found}")
+        info(f"Total DEX strings extracted: {len(dex_strings)}")
+        info(f"resources.arsc found: {arsc_found}")
+        info(f"Total ARSC strings extracted: {len(arsc_strings)}")
+        info(f"XML files found: {xml_files_found}")
+        info(f"XML files with extracted strings: {xml_files_parsed}")
+        info(f"Total XML strings extracted: {len(xml_strings)}")
+        info(f"Total combined strings: {len(all_strings)}\n")
 
     # Remove duplicates by string + source
     seen = set()
@@ -166,16 +155,14 @@ def run_static_analysis(apk_path, output_file=None, debug_mode=False, skip_filte
         if filtered is None:
             # Find which pattern(s) are invalid
             filter_list = pattern_filter if isinstance(pattern_filter, list) else [pattern_filter]
-            print(f"[ERROR] Unknown pattern(s): {', '.join(filter_list)}")
+            error(f"Unknown pattern(s): {', '.join(filter_list)}")
             return
         strings_to_save = filtered
         pattern_desc = ', '.join(applied_patterns)
-        print(f"[*] Filtered by pattern(s) '{pattern_desc}': {len(strings_to_save)} matches")
+        info(f"Filtered by pattern(s) '{pattern_desc}': {len(strings_to_save)} matches")
     
     # Save JSON
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(strings_to_save, f, indent=2, ensure_ascii=False)
 
-    YELLOW = '\033[33m'
-    RESET = '\033[0m'
-    print(f"{YELLOW}[OK] Saved {len(strings_to_save)} strings to {output_file}{RESET}")
+    ok(f"Saved {len(strings_to_save)} strings to {output_file}")

@@ -3,25 +3,10 @@ import tempfile
 import os
 from androguard.core.apk import APK
 from .filters import is_useful_string
+from ..utils.logger import error, debug as logger_debug
 
 
 def extract_strings_from_arsc(data, debug=False, skip_filter=False):
-    """
-    Extract strings from resources.arsc using androguard.
-    
-    Args:
-        data: Raw bytes from z.read('resources.arsc')
-        debug: Enable debug output
-        skip_filter: Skip is_useful_string() filtering
-    
-    Returns: list of dicts with format:
-        {
-            "string": <string_value>,
-            "source": "resources.arsc",
-            "resource_name": <resource_name>,  # e.g., "support_email"
-            "resource_type": <resource_type>   # e.g., "string"
-        }
-    """
     all_strings = []
     tmp_path = None
     
@@ -46,36 +31,31 @@ def extract_strings_from_arsc(data, debug=False, skip_filter=False):
             # Get the resource parser from APK
             parser = apk.get_android_resources()
             if parser is None:
-                if debug:
-                    print("[ARSC DEBUG] No resources found in APK")
+                logger_debug("No resources found in APK", debug)
                 return []
             
             # Get resolved strings (which gives us localized strings with resource IDs as keys)
             resolved = parser.get_resolved_strings()
             if not resolved:
-                if debug:
-                    print("[ARSC DEBUG] No resolved strings found")
+                logger_debug("No resolved strings found", debug)
                 return []
             
             # Get package name
             packages = parser.get_packages_names()
             if not packages:
-                if debug:
-                    print("[ARSC DEBUG] No package names found")
+                logger_debug("No package names found", debug)
                 return []
             
             pkg = packages[0]
             strings_data = resolved.get(pkg, {})
             if not strings_data:
-                if debug:
-                    print(f"[ARSC DEBUG] No string data for package {pkg}")
+                logger_debug(f"No string data for package {pkg}", debug)
                 return []
             
             # Extract strings from the DEFAULT locale (or first available)
             locale = 'DEFAULT' if 'DEFAULT' in strings_data else next(iter(strings_data.keys()), None)
             if not locale or locale not in strings_data:
-                if debug:
-                    print("[ARSC DEBUG] No locale found in strings_data")
+                logger_debug("No locale found in strings_data", debug)
                 return []
             
             locale_strings = strings_data[locale]
@@ -109,13 +89,8 @@ def extract_strings_from_arsc(data, debug=False, skip_filter=False):
                     })
                 
                 except Exception as e:
-                    if debug:
-                        print(f"[ARSC DEBUG] Error processing resource ID {res_id}: {e}")
+                    logger_debug(f"Error processing resource ID {res_id}: {e}", debug)
                     continue
-            
-            if debug and all_strings:
-                print(f"[ARSC DEBUG] {len(all_strings)} strings extracted from resources.arsc")
-            
             return all_strings
         
         finally:
@@ -123,9 +98,9 @@ def extract_strings_from_arsc(data, debug=False, skip_filter=False):
             sys.stderr = old_stderr
     
     except Exception as e:
+        error(f"ARSC extraction failed: {e}")
         if debug:
             import traceback
-            print(f"[ERROR] ARSC extraction failed: {e}")
             traceback.print_exc()
         return []
     

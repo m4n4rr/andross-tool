@@ -1,8 +1,5 @@
 import re
 
-# ================================
-# PATTERN REGEXES
-# ================================
 patterns = {
     "md5": re.compile(r"^[a-fA-F0-9]{32}$"),
     "google_api_key": re.compile(r"AIza[0-9A-Za-z-_]{35}"),
@@ -25,14 +22,8 @@ patterns = {
     "api_key_in_query": re.compile(r"[?&](api_key|key|token|auth)[=][A-Za-z0-9\-_\.%]{8,200}"),
 }
 
-# ================================
-# PATTERN UTILITIES
-# ================================
 def normalize_string(s):
-    """Normalize string by stripping common quotes and whitespace
-    
-    Handles strings like: 'value', "value", `value`, value
-    """
+
     s = s.strip()
     # Remove surrounding quotes if present
     if (s.startswith("'") and s.endswith("'")) or \
@@ -43,20 +34,10 @@ def normalize_string(s):
 
 
 def get_available_patterns():
-    """Return list of available pattern names"""
     return list(patterns.keys())
 
 
 def filter_by_pattern(strings, pattern_names):
-    """Filter strings list by one or more pattern names
-    
-    Args:
-        strings: List of string objects with format {"string": s, "dex": ..., "class": ..., "method": ...}
-        pattern_names: Single pattern name (str), list of pattern names, or "all" to filter by all patterns
-    
-    Returns:
-        Tuple of (filtered_list, applied_patterns) or (None, None) if pattern not found
-    """
     # Convert single pattern to list
     if isinstance(pattern_names, str):
         pattern_names = [pattern_names]

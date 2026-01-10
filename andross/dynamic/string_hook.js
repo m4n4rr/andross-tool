@@ -1,6 +1,3 @@
-// Structured event-based string interception for Frida
-// Emits JSON events via console.log for command-line capture
-
 Java.perform(function () {
 
     // Event emitter - outputs structured JSON data to console

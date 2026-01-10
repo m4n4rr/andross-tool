@@ -4,25 +4,14 @@ from androguard.core.axml import AXMLPrinter
 
 from .filters import is_useful_string
 
-# ================================
-# CONVERT BINARY AXML TO TEXT XML
-# ================================
 def axml_to_xml_string(axml_bytes):
-    """
-    Convert binary Android XML (AXML) to readable XML string.
-    Uses androguard's AXMLPrinter to parse binary XML.
-    """
     try:
         printer = AXMLPrinter(axml_bytes)
         return printer.get_xml_as_string()
     except Exception:
         return None
 
-# ================================
-# EXTRACT STRINGS FROM XML RESOURCES
-# ================================
 def extract_strings_from_xml_bytes(xml_bytes, xml_file_path, debug=False, skip_filter=False):
-    """Extract strings from XML resource files (both text and binary AXML)"""
     try:
         # Try to parse as binary AXML first
         xml_string = axml_to_xml_string(xml_bytes)

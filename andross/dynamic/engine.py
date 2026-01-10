@@ -6,34 +6,22 @@ import threading
 
 from .event_processor import StringEventProcessor
 from .manifest_parser import extract_package_from_apk
+from ..utils.logger import error, info, ok
 
 
 def run_dynamic_analysis(output_file, apk_path, minimal=False):
-    """Run dynamic analysis using Frida with structured event processing
-    
-    Args:
-        output_file: File path where to save processed JSON results
-        apk_path: Path to the APK file (for package name extraction)
-        minimal: If True, use minimal script (StringBuilder and valueOf disabled)
-    
-    Precondition: Device must be ready (ensured via ensure_device_ready())
-        - Emulator is online
-        - Frida-server is running
-        - App is installed
-    """
-    
     # Extract package name from APK
     try:
-        print("\033[93m[*] Extracting package name from APK...\033[0m")
-        package_name = extract_package_from_apk(apk_path, debug=False)
+        info("Extracting package name from APK...")
+        package_name = extract_package_from_apk(apk_path, debug_mode=False)
         if not package_name:
-            print("\033[91m[ERROR] Failed to extract package name from APK\033[0m")
+            error("Failed to extract package name from APK")
             return False
     except Exception as e:
-        print(f"\033[91m[ERROR] Failed to extract package name: {e}\033[0m")
+        error(f"Failed to extract package name: {e}")
         return False
     
-    print(f"\033[93m[*] Target package: {package_name}\033[0m")
+    info(f"Target package: {package_name}")
     
     # Create parent directory if it doesn't exist
     output_dir = os.path.dirname(output_file)
@@ -45,12 +33,12 @@ def run_dynamic_analysis(output_file, apk_path, minimal=False):
     script_path = os.path.join(os.path.dirname(__file__), script_name)
     
     if not os.path.exists(script_path):
-        print(f"[ERROR] {script_name} not found in the script directory")
+        error(f"{script_name} not found in the script directory")
         return False
     
     mode_label = "minimal" if minimal else "full"
-    print(f"\033[93m[*] Starting Frida dynamic analysis ({mode_label} mode)...\033[0m")
-    print("\033[93m[*] Press Ctrl+C to stop the analysis\033[0m")
+    info(f"Starting Frida dynamic analysis ({mode_label} mode)...")
+    info("Press Ctrl+C to stop the analysis")
     
     # Initialize event processor
     processor = StringEventProcessor()
@@ -68,7 +56,7 @@ def run_dynamic_analysis(output_file, apk_path, minimal=False):
         
         # Process output line by line
         event_count = 0
-        print("\033[93m[*] Listening for string events...\033[0m")
+        info("Listening for string events...")
         
         # Track time to detect if Frida attached to device
         start_time = time.time()
@@ -105,10 +93,11 @@ def run_dynamic_analysis(output_file, apk_path, minimal=False):
             
             # Check for timeout if no events received yet
             if event_count == 0 and elapsed > attachment_timeout:
-                print(f"\n\033[91m[ERROR] Timeout: Frida did not attach to device within {attachment_timeout} seconds\033[0m")
-                print("\033[93m[*] Note: Device was verified ready before starting Frida\033[0m")
-                print("\033[93m[*] This may indicate a Frida-server connection issue or app crash\033[0m")
-                print("\033[93m[*] Try: adb shell 'ps -A | grep <package>'\033[0m")
+                print("\n")
+                error(f"Timeout: Frida did not attach to device within {attachment_timeout} seconds")
+                info("Note: Device was verified ready before starting Frida")
+                info("This may indicate a Frida-server connection issue or app crash")
+                info("Try: adb shell 'ps -A | grep <package>'")
                 
                 if process and process.poll() is None:
                     try:
@@ -141,19 +130,21 @@ def run_dynamic_analysis(output_file, apk_path, minimal=False):
         
         # Check return code
         if process.returncode == 0:
-            print("\033[92m[OK] Frida session completed successfully\033[0m")
+            ok("Frida session completed successfully")
         else:
-            print(f"\033[93m[*] Frida session ended with exit code {process.returncode}\033[0m")
+            info(f"Frida session ended with exit code {process.returncode}")
             
             if not minimal and event_count < 10:
-                print("\n\033[93m[*] SUGGESTION: Try again with --minimal flag to reduce memory pressure:\033[0m")
+                print("")
+                info("SUGGESTION: Try again with --minimal flag to reduce memory pressure:")
                 print(f"    python Andross.py --dynamic <path/to/app.apk> --output {output_file} --minimal")
         
         # Process and save results
         aggregated_data = processor.get_aggregated_data(package_name)
         stats = processor.get_statistics()
         
-        print("\n\033[93m[*] Processing results:\033[0m")
+        print("")
+        info("Processing results:")
         print(f"    Total events received: {stats['total_events']}")
         print(f"    Unique string combinations: {stats['unique_combinations']}")
         print(f"    Total deduplicated count: {stats['aggregated_count']}")
@@ -162,25 +153,27 @@ def run_dynamic_analysis(output_file, apk_path, minimal=False):
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(aggregated_data, f, indent=2, ensure_ascii=False)
         
-        print(f"\033[92m[OK] Saved structured output to {output_file}\033[0m")
+        ok(f"Saved structured output to {output_file}")
         return True
         
     except KeyboardInterrupt:
-        print("\n\033[93m[*] Stopping Frida analysis...\033[0m")
+        print("")
+        info("Stopping Frida analysis...")
         if process and process.poll() is None:
             try:
                 process.terminate()
                 process.wait(timeout=5)
-                print("\033[92m[OK] Frida stopped gracefully\033[0m")
+                ok("Frida stopped gracefully")
             except subprocess.TimeoutExpired:
                 process.kill()
-                print("\033[92m[OK] Frida killed forcefully\033[0m")
+                ok("Frida killed forcefully")
         
         # Get and display results statistics
         aggregated_data = processor.get_aggregated_data(package_name)
         stats = processor.get_statistics()
         
-        print("\n\033[93m[*] Processing results:\033[0m")
+        print("")
+        info("Processing results:")
         print(f"    Total events received: {stats['total_events']}")
         print(f"    Unique string combinations: {stats['unique_combinations']}")
         print(f"    Total deduplicated count: {stats['aggregated_count']}")
@@ -189,14 +182,14 @@ def run_dynamic_analysis(output_file, apk_path, minimal=False):
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(aggregated_data, f, indent=2, ensure_ascii=False)
         
-        print(f"\033[92m[OK] Partial results saved to {output_file}\033[0m")
+        ok(f"Partial results saved to {output_file}")
         return True
         
     except FileNotFoundError:
-        print("\033[91m[ERROR] frida command not found. Make sure Frida is installed and in PATH\033[0m")
+        error("frida command not found. Make sure Frida is installed and in PATH")
         return False
     except Exception as e:
-        print(f"\033[91m[ERROR] Failed to run Frida: {e}\033[0m")
+        error(f"Failed to run Frida: {e}")
         import traceback
         traceback.print_exc()
         return False

@@ -19,6 +19,7 @@ from andross.static import run_static_analysis, get_available_patterns
 from andross.dynamic import run_dynamic_analysis
 from andross.hybrid import run_hybrid_analysis
 from andross.utils import ensure_device_ready
+from andross.utils.logger import error
 
 # Suppress standard logging from androguard modules
 logging.getLogger("androguard.core").setLevel(logging.ERROR)
@@ -157,14 +158,14 @@ def main():
     elif first_arg == '--hybrid':
         mode = '--hybrid'
     else:
-        print("\033[91m[ERROR] Must specify either --static, --dynamic, or --hybrid mode as the first argument\033[0m")
+        error("Must specify either --static, --dynamic, or --hybrid mode as the first argument")
         print_usage()
         sys.exit(1)
     
     # Handle static mode
     if mode == '--static':
         if len(sys.argv) < 3:
-            print("\033[91m[ERROR] Static mode requires APK path\033[0m")
+            error("Static mode requires APK path")
             print("Usage: python Andross.py --static <path/to/app.apk> [--output <path>] [--pattern <name> ...] [--debug] [--skip-filter]")
             sys.exit(1)
         
@@ -181,11 +182,11 @@ def main():
             try:
                 output_idx = sys.argv.index('--output')
                 if output_idx + 1 >= len(sys.argv):
-                    print("\033[91m[ERROR] --output argument requires a path\033[0m")
+                    error("--output argument requires a path")
                     sys.exit(1)
                 output_file = sys.argv[output_idx + 1]
             except (ValueError, IndexError):
-                print("\033[91m[ERROR] Invalid --output argument\033[0m")
+                error("Invalid --output argument")
                 sys.exit(1)
         
         # Check for optional --pattern argument(s)
@@ -201,14 +202,14 @@ def main():
                     idx += 1
                 
                 if not patterns_list:
-                    print("\033[91m[ERROR] --pattern argument requires at least one pattern name\033[0m")
+                    error("--pattern argument requires at least one pattern name")
                     print("Use: python Andross.py --pattern help   (to see available patterns)")
                     sys.exit(1)
                 
                 # If only one pattern, keep as string; if multiple, pass as list
                 pattern_filter = patterns_list[0] if len(patterns_list) == 1 else patterns_list
             except (ValueError, IndexError):
-                print("\033[91m[ERROR] Invalid --pattern argument\033[0m")
+                error("Invalid --pattern argument")
                 sys.exit(1)
         
         run_static_analysis(apk_path, output_file=output_file, debug_mode=debug_mode, skip_filter=skip_filter, pattern_filter=pattern_filter)
@@ -216,7 +217,7 @@ def main():
     # Handle dynamic mode
     elif mode == '--dynamic':
         if len(sys.argv) < 3:
-            print("\033[91m[ERROR] Dynamic mode requires APK path\033[0m")
+            error("Dynamic mode requires APK path")
             print("Usage: python Andross.py --dynamic <path/to/app.apk> [--output <path>] [--minimal] [--frida-path <path>] [--debug]")
             sys.exit(1)
         
@@ -224,7 +225,7 @@ def main():
         
         # Check if APK file exists
         if not os.path.exists(apk_path):
-            print(f"\033[91m[ERROR] APK not found: {apk_path}\033[0m")
+            error(f"APK not found: {apk_path}")
             sys.exit(1)
         
         # Check for optional --output argument (default: dynamic_strings.json)
@@ -233,11 +234,11 @@ def main():
             try:
                 output_idx = sys.argv.index('--output')
                 if output_idx + 1 >= len(sys.argv):
-                    print("\033[91m[ERROR] --output argument requires a file path\033[0m")
+                    error("--output argument requires a file path")
                     sys.exit(1)
                 output_file = sys.argv[output_idx + 1]
             except (ValueError, IndexError):
-                print("\033[91m[ERROR] Invalid --output argument\033[0m")
+                error("Invalid --output argument")
                 sys.exit(1)
         
         minimal_mode = '--minimal' in sys.argv
@@ -252,11 +253,11 @@ def main():
             try:
                 frida_idx = sys.argv.index('--frida-path')
                 if frida_idx + 1 >= len(sys.argv):
-                    print("\033[91m[ERROR] --frida-path argument requires a file path\033[0m")
+                    error("--frida-path argument requires a file path")
                     sys.exit(1)
                 frida_server_path = sys.argv[frida_idx + 1]
             except (ValueError, IndexError):
-                print("\033[91m[ERROR] Invalid --frida-path argument\033[0m")
+                error("Invalid --frida-path argument")
                 sys.exit(1)
         
         try:
@@ -267,13 +268,13 @@ def main():
             # Step 2: Run dynamic analysis (device setup is already guaranteed)
             run_dynamic_analysis(output_file, apk_path, minimal=minimal_mode)
         except Exception as e:
-            print(f"\033[91m[ERROR] {e}\033[0m")
+            error(str(e))
             sys.exit(1)
     
     # Handle hybrid mode
     elif mode == '--hybrid':
         if len(sys.argv) < 3:
-            print("\033[91m[ERROR] Hybrid mode requires APK path\033[0m")
+            error("Hybrid mode requires APK path")
             print("Usage: python Andross.py --hybrid <path/to/app.apk> [--output <path>] [--frida-path <path>] [--debug] [--skip-filter]")
             sys.exit(1)
         
@@ -281,7 +282,7 @@ def main():
         
         # Check if APK file exists
         if not os.path.exists(apk_path):
-            print(f"\033[91m[ERROR] APK not found: {apk_path}\033[0m")
+            error(f"APK not found: {apk_path}")
             sys.exit(1)
         
         # Check for optional --output argument (default: hybrid_strings.json)
@@ -290,11 +291,11 @@ def main():
             try:
                 output_idx = sys.argv.index('--output')
                 if output_idx + 1 >= len(sys.argv):
-                    print("\033[91m[ERROR] --output argument requires a file path\033[0m")
+                    error("--output argument requires a file path")
                     sys.exit(1)
                 output_file = sys.argv[output_idx + 1]
             except (ValueError, IndexError):
-                print("\033[91m[ERROR] Invalid --output argument\033[0m")
+                error("Invalid --output argument")
                 sys.exit(1)
         
         debug_mode = '--debug' in sys.argv
@@ -309,11 +310,11 @@ def main():
             try:
                 frida_idx = sys.argv.index('--frida-path')
                 if frida_idx + 1 >= len(sys.argv):
-                    print("\033[91m[ERROR] --frida-path argument requires a file path\033[0m")
+                    error("--frida-path argument requires a file path")
                     sys.exit(1)
                 frida_server_path = sys.argv[frida_idx + 1]
             except (ValueError, IndexError):
-                print("\033[91m[ERROR] Invalid --frida-path argument\033[0m")
+                error("Invalid --frida-path argument")
                 sys.exit(1)
         
         try:
@@ -324,7 +325,7 @@ def main():
             # Step 2: Run hybrid analysis (device setup is already guaranteed)
             run_hybrid_analysis(output_file, apk_path, debug_mode=debug_mode, skip_filter=skip_filter, frida_server_path=frida_server_path)
         except Exception as e:
-            print(f"\033[91m[ERROR] {e}\033[0m")
+            error(str(e))
             sys.exit(1)
 
 

@@ -1,17 +1,10 @@
 import re
-
 from androguard.core.dex import DEX
 from .filters import is_useful_string
+from ..utils.logger import error
 
-# ================================
-# EXTRACT COROUTINE METHOD NAMES
-# ================================
+
 def extract_coroutine_method_name(class_name, method_name):
-    """
-    Maps invokeSuspend methods back to original Kotlin suspend function names.
-    Pattern: OuterClass$functionName$*
-    Example: MyClass$checkForUpdates$1 -> checkForUpdates (suspend)
-    """
     if method_name != "invokeSuspend":
         return method_name
     
@@ -23,9 +16,7 @@ def extract_coroutine_method_name(class_name, method_name):
     
     return method_name
 
-# ================================
-# EXTRACT STRINGS FROM DEX IN MEMORY
-# ================================
+
 def extract_strings_from_dex_bytes(dex_bytes, dex_name):
     try:
         d = DEX(dex_bytes)
@@ -53,5 +44,5 @@ def extract_strings_from_dex_bytes(dex_bytes, dex_name):
                             })
         return all_strings
     except Exception as e:
-        print(f"[ERROR] DEX extraction failed ({dex_name}): {e}")
+        error(f"DEX extraction failed ({dex_name}): {e}")
         return []

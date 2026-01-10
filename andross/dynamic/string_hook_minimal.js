@@ -1,7 +1,3 @@
-// Structured event-based string interception for Frida (MINIMAL MODE)
-// Emits JSON events via console.log for command-line capture
-// MINIMAL: Disables StringBuilder and valueOf to reduce memory pressure
-
 Java.perform(function () {
 
     // Event emitter - outputs structured JSON data to console

@@ -1,6 +1,3 @@
-# ================================
-# STRING FILTER
-# ================================
 def is_useful_string(s):
     if not s or len(s) < 4:
         return False

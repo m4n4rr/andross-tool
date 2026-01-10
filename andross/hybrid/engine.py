@@ -48,7 +48,7 @@ def run_hybrid_analysis(output_file, apk_path, debug_mode=False, skip_filter=Fal
     # Extract package name from APK
     try:
         print("\033[93m[*] Extracting package name from APK...\033[0m")
-        package_name = extract_package_from_apk(apk_path, debug=debug_mode)
+        package_name = extract_package_from_apk(apk_path, debug_mode=debug_mode)
         if not package_name:
             print("\033[91m[ERROR] Failed to extract package name from APK\033[0m")
             return False
